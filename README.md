@@ -2,7 +2,8 @@
 
 ## Overview
 
-**Lend A Hand** is a mobile app to connect donors and receivers.
+**Lend A Hand** is a mobile app designed to connect people who have surplus resources with those in need.
+Users can donate items, request items, and facilitate community-driven support through direct connections.
 
 ---
 
