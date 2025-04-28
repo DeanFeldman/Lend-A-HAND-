@@ -5,83 +5,99 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FAFAFA"
     tools:context=".Donate">
-
 
     <ScrollView
         android:id="@+id/donate_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/donateContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="24dp">
-
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:padding="32dp"
+            android:layout_margin="16dp">
 
             <TextView
                 android:id="@+id/donate_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="32dp"
                 android:text="Donate Items"
                 android:textSize="28sp"
+                android:textColor="#333333"
                 android:textStyle="bold" />
-
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select Item"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
 
             <Spinner
                 android:id="@+id/spinner_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp" />
-
+                android:layout_marginBottom="24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select Quantity to Donate"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
 
             <EditText
                 android:id="@+id/input_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
                 android:hint="Enter quantity"
-                android:inputType="number" />
-
+                android:inputType="number"
+                android:backgroundTint="#CCCCCC"
+                android:padding="12dp"
+                android:layout_marginBottom="24dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:text="Receivers Needing This Item"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="8dp" />
 
             <TextView
                 android:id="@+id/ListOfPpl"
                 android:layout_width="match_parent"
-                android:layout_height="313dp"
-                android:text="ListofPpl" />
-
+                android:layout_height="200dp"
+                android:background="#EEEEEE"
+                android:padding="12dp"
+                android:text="List of people needing this item..."
+                android:textColor="#444444"
+                android:gravity="top|start"
+                android:layout_marginBottom="24dp" />
 
             <Button
                 android:id="@+id/button_donate_to_receiver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#2979FF"
                 android:text="Donate to Selected Receiver"
-                android:textColor="#FFFFFF" />
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:backgroundTint="#2979FF"
+                android:padding="14dp"
+                android:elevation="2dp" />
 
         </LinearLayout>
 
@@ -92,30 +108,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="16dp"
-        android:background="#EEEEEE">
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:padding="8dp"
+        android:weightSum="3"
+        android:gravity="center">
 
         <Button
             android:id="@+id/button_DonorWall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Donor Wall" />
+            android:text="Donor Wall"
+            android:textAllCaps="false"
+            android:backgroundTint="#002366"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:elevation="2dp" />
 
         <Button
             android:id="@+id/Button_Profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Profile" />
+            android:text="Profile"
+            android:textAllCaps="false"
+            android:backgroundTint="#002366"
+            android:textColor="#FFFFFF"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp"
+            android:elevation="2dp" />
 
         <Button
             android:id="@+id/button_Recieve"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Recieve" />
+            android:text="Receive"
+            android:textAllCaps="false"
+                android:backgroundTint="#002366"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:elevation="2dp" />
 
     </LinearLayout>
 

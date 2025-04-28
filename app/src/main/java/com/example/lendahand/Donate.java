@@ -2,7 +2,9 @@ package com.example.lendahand;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,7 +43,14 @@ public class Donate extends AppCompatActivity {
             startActivity(intent);
         });
 
-
+        //fill the arrays
+        Spinner spinnerItems = findViewById(R.id.spinner_items);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                ItemList.ITEMS
+        );
+        spinnerItems.setAdapter(adapter);
 
     }
 }

@@ -5,27 +5,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#FAFAFA"
     tools:context=".Donorwall">
 
     <ScrollView
         android:id="@+id/donorwall_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:padding="16dp"
+        android:fillViewport="true">
 
         <LinearLayout
             android:id="@+id/DonorWall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:padding="24dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/leaderboard_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Top Donors"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#333333"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
 
             <LinearLayout
                 android:id="@+id/leaderboardContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp" />
+                android:orientation="vertical" />
 
         </LinearLayout>
 
@@ -36,30 +52,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center"
-        android:background="#EEEEEE">
+        android:background="@android:color/white"
+        android:elevation="8dp"
+        android:padding="8dp"
+        android:weightSum="3"
+        android:gravity="center">
 
         <Button
             android:id="@+id/button_Profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Profile" />
+            android:text="Profile"
+            android:textAllCaps="false"
+            android:backgroundTint="#002366"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:elevation="2dp" />
 
         <Button
             android:id="@+id/button_Donate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Donate" />
+            android:text="Donate"
+            android:textAllCaps="false"
+            android:backgroundTint="#002366"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:elevation="2dp" />
 
         <Button
             android:id="@+id/button_Recieve"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Recieve" />
+            android:text="Receive"
+            android:textAllCaps="false"
+            android:backgroundTint="#002366"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:elevation="2dp" />
 
     </LinearLayout>
 

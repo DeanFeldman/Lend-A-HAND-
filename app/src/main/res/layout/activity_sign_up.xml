@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/signup"
     android:fillViewport="true"
-   >
+    android:background="#FAFAFA"
+    android:id="@+id/signup">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:padding="32dp"
+        android:gravity="center_horizontal"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:layout_margin="16dp"
+        android:layout_gravity="center">
 
         <TextView
             android:id="@+id/signup_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign Up"
-            android:textSize="26sp"
+            android:textSize="28sp"
             android:textStyle="bold"
+            android:textColor="#333333"
             android:layout_marginBottom="24dp" />
 
         <EditText
@@ -29,6 +35,8 @@
             android:layout_height="wrap_content"
             android:hint="First Name"
             android:inputType="textPersonName"
+            android:backgroundTint="#CCCCCC"
+            android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
         <EditText
@@ -37,6 +45,8 @@
             android:layout_height="wrap_content"
             android:hint="Surname"
             android:inputType="textPersonName"
+            android:backgroundTint="#CCCCCC"
+            android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
         <EditText
@@ -44,9 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Date of Birth (DD/MM/YYYY)"
-            android:inputType="date"
+            android:inputType="text"
+            android:backgroundTint="#CCCCCC"
+            android:padding="12dp"
             android:layout_marginBottom="16dp" />
-
 
         <EditText
             android:id="@+id/input_email"
@@ -54,8 +65,9 @@
             android:layout_height="wrap_content"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
+            android:backgroundTint="#CCCCCC"
+            android:padding="12dp"
             android:layout_marginBottom="16dp" />
-
 
         <EditText
             android:id="@+id/input_password"
@@ -63,6 +75,8 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:inputType="textPassword"
+            android:backgroundTint="#CCCCCC"
+            android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
         <EditText
@@ -71,13 +85,21 @@
             android:layout_height="wrap_content"
             android:hint="Confirm Password"
             android:inputType="textPassword"
+            android:backgroundTint="#CCCCCC"
+            android:padding="12dp"
             android:layout_marginBottom="24dp" />
 
         <Button
             android:id="@+id/button_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign Up" />
+            android:text="Sign Up"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:backgroundTint="#2979FF"
+            android:padding="14dp"
+            android:elevation="2dp" />
 
     </LinearLayout>
 </ScrollView>
