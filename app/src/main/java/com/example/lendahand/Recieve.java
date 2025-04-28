@@ -10,38 +10,35 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Donate extends AppCompatActivity {
+public class Recieve extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_donate);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.donate_scrollview), (v, insets) -> {
+        setContentView(R.layout.activity_recieve);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.receiver_scrollview), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        Button buttonDonorWall = findViewById(R.id.button_DonorWall);
+        Button buttonDonorWall = findViewById(R.id.button_donorwall);
         buttonDonorWall.setOnClickListener(view -> {
-            Intent intent = new Intent(Donate.this, Donorwall.class);
+            Intent intent = new Intent(Recieve.this, Donorwall.class);
             startActivity(intent);
         });
 
-        Button buttonProfile = findViewById(R.id.Button_Profile);
+        Button buttonProfile = findViewById(R.id.button_profile);
         buttonProfile.setOnClickListener(view -> {
-            Intent intent = new Intent(Donate.this, Profile.class);
+            Intent intent = new Intent(Recieve.this, Profile.class);
             startActivity(intent);
         });
 
-        Button buttonRecieve = findViewById(R.id.button_Recieve);
-        buttonRecieve.setOnClickListener(view -> {
-            Intent intent = new Intent(Donate.this, Recieve.class);
+        Button buttonDonate = findViewById(R.id.button_donate);
+        buttonDonate.setOnClickListener(view -> {
+            Intent intent = new Intent(Recieve.this, Donate.class);
             startActivity(intent);
         });
-
-
-
     }
 }

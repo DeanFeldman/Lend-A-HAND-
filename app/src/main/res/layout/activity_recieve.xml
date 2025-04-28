@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Donate">
+    tools:context=".Recieve">
 
 
     <ScrollView
-        android:id="@+id/donate_scrollview"
+        android:id="@+id/receiver_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/donateContainer"
+            android:id="@+id/receiverContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -23,24 +23,25 @@
 
 
             <TextView
-                android:id="@+id/donate_title"
+                android:id="@+id/receiver_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="24dp"
-                android:text="Donate Items"
+                android:text="Request Items"
                 android:textSize="28sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select Item"
-                android:textSize="16sp" />
+                android:text="Select Item Needed"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
 
             <Spinner
-                android:id="@+id/spinner_items"
+                android:id="@+id/spinner_needed_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp" />
@@ -49,46 +50,33 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select Quantity to Donate"
-                android:textSize="16sp" />
+                android:text="Select Quantity Needed"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp" />
 
             <EditText
-                android:id="@+id/input_quantity"
+                android:id="@+id/input_needed_quantity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:hint="Enter quantity"
-                android:inputType="number" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Receivers Needing This Item"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/ListOfPpl"
-                android:layout_width="match_parent"
-                android:layout_height="313dp"
-                android:text="ListofPpl" />
+                android:hint="Enter quantity needed"
+                android:inputType="number"
+                android:layout_marginBottom="24dp" />
 
 
             <Button
-                android:id="@+id/button_donate_to_receiver"
+                android:id="@+id/button_add_request"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Add Request"
                 android:backgroundTint="#2979FF"
-                android:text="Donate to Selected Receiver"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>
-
     </ScrollView>
 
+
     <LinearLayout
-        android:id="@+id/bottom_button_bar_donate"
+        android:id="@+id/bottom_button_bar_receiver"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -97,25 +85,25 @@
         android:background="#EEEEEE">
 
         <Button
-            android:id="@+id/button_DonorWall"
+            android:id="@+id/button_donate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Donor Wall" />
+            android:text="Donate" />
 
         <Button
-            android:id="@+id/Button_Profile"
+            android:id="@+id/button_profile"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Profile" />
 
         <Button
-            android:id="@+id/button_Recieve"
+            android:id="@+id/button_donorwall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Recieve" />
+            android:text="Donor Wall" />
 
     </LinearLayout>
 

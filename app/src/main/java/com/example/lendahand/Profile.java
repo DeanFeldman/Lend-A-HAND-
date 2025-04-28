@@ -25,9 +25,28 @@ public class Profile extends AppCompatActivity {
 
         Button buttonLogin = findViewById(R.id.button_save_profile);
         buttonLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(Profile.this, Profile.class);
+            startActivity(intent);
+        });
+
+        Button buttonDonorWall = findViewById(R.id.button_DonorWall);
+        buttonDonorWall.setOnClickListener(view -> {
             Intent intent = new Intent(Profile.this, Donorwall.class);
             startActivity(intent);
         });
+
+        Button buttonDonate = findViewById(R.id.button_Donate);
+        buttonDonate.setOnClickListener(view -> {
+            Intent intent = new Intent(Profile.this, Donate.class);
+            startActivity(intent);
+        });
+
+        Button buttonRecieve = findViewById(R.id.button_Recieve);
+        buttonRecieve.setOnClickListener(view -> {
+            Intent intent = new Intent(Profile.this, Recieve.class);
+            startActivity(intent);
+        });
+
 
     }
 }

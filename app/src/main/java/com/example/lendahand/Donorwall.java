@@ -1,5 +1,6 @@
 package com.example.lendahand;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,6 +11,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.io.IOException;
 import okhttp3.Response;
+
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,6 +43,25 @@ public class Donorwall extends AppCompatActivity {
 
         leaderboard = findViewById(R.id.leaderboardContainer);
         fetchDonorsFromDatabase();
+
+
+        Button buttonProfile = findViewById(R.id.button_Profile);
+        buttonProfile.setOnClickListener(view -> {
+            Intent intent = new Intent(Donorwall.this, Profile.class);
+            startActivity(intent);
+        });
+
+        Button buttonDonate = findViewById(R.id.button_Donate);
+        buttonDonate.setOnClickListener(view -> {
+            Intent intent = new Intent(Donorwall.this, Donate.class);
+            startActivity(intent);
+        });
+
+        Button buttonRecieve = findViewById(R.id.button_Recieve);
+        buttonRecieve.setOnClickListener(view -> {
+            Intent intent = new Intent(Donorwall.this, Donate.class);
+            startActivity(intent);
+        });
     }
 
     private void fetchDonorsFromDatabase() {
