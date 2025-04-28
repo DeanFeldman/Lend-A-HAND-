@@ -1,9 +1,13 @@
 package com.example.lendahand;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,10 +28,18 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        TextView signupLink = findViewById(R.id.text_signup_note);
-        signupLink.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-            navController.navigate(R.id.text_signup_note);
+
+        TextView textLogin = findViewById(R.id.here);
+        textLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, SignUp.class);
+            startActivity(intent);
+        });
+
+        Button buttonLogin = findViewById(R.id.button_login);
+        buttonLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, Donorwall.class);
+            startActivity(intent);
         });
     }
+
 }
