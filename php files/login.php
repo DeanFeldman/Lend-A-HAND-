@@ -6,7 +6,7 @@ $user_password = $_REQUEST['user_password'];
 
 $response = array();
 
-$stmt = mysqli_prepare($link, "SELECT user_ID, user_fname, user_lname, user_dob, user_email, user_password, user_biography FROM USER WHERE user_email = ?");
+$stmt = mysqli_prepare($link, "SELECT user_id, user_fname, user_lname, user_dob, user_email, user_password, user_biography FROM USERS WHERE user_email = ?");
 mysqli_stmt_bind_param($stmt, "s", $user_email);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
