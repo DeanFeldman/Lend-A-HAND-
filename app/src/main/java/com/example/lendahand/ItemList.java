@@ -1,24 +1,62 @@
 package com.example.lendahand;
 
-public class ItemList {
-    public static final String[] ITEMS = {
-            "Please select an item below",
-            "Tinned Tuna",
-            "Rice",
-            "Maize Meal",
-            "Peanut Butter",
-            "Bread",
-            "Eggs",
-            "Toilet Paper",
-            "Soap",
-            "Sanitary Pads",
-            "Baby Formula",
-            "Nappies",
-            "Blanket",
-            "Pens",
-            "Pencil",
-            "Eraser",
-            "Ruler"
-    };
+import android.widget.Toast;
 
+import org.json.JSONArray;
+
+import android.content.Context;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import java.util.List;
+
+public class ItemList {
+
+    public static List<String> ITEMS = new ArrayList<>();
+
+    public void FetchItems(Context context) {
+        OkHttpClient client  = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/items.php")
+                .build();
+
+        try{
+            Response response = client.newCall(request).execute();
+            if(response.isSuccessful() && response.body() != null){
+                String responseBody = response.body().string();
+
+                JSONArray jsonArray = new JSONArray(responseBody);
+
+                ITEMS.clear();
+                ITEMS.add("Please select an item below");
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    String item = jsonArray.getString(i);
+                    ITEMS.add(item);
+                }
+
+                Toast.makeText(context, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+
+            }
+            else{
+                Toast.makeText(context, "Failed to fetch items", Toast.LENGTH_SHORT).show();
+            }
+
+        }
+        catch(IOException | JSONException e){
+            e.printStackTrace();
+            Toast.makeText(context, "Error fetching items", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public static List<String> getItems() {
+        return ITEMS;
+    }
 }
