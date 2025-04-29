@@ -1,8 +1,12 @@
 package com.example.lendahand;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,9 +14,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Profile extends AppCompatActivity {
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    @Override
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class Profile extends AppCompatActivity {
+        private EditText editTextName;
+        private EditText editTextBio;
+
+
+        @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -22,12 +42,10 @@ public class Profile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        editTextName = findViewById(R.id.input_name);
+        editTextBio =    findViewById(R.id.input_bio);
 
-        Button buttonLogin = findViewById(R.id.button_save_profile);
-        buttonLogin.setOnClickListener(view -> {
-            Intent intent = new Intent(Profile.this, Profile.class);
-            startActivity(intent);
-        });
+
 
         Button buttonDonorWall = findViewById(R.id.button_DonorWall);
         buttonDonorWall.setOnClickListener(view -> {
@@ -47,6 +65,140 @@ public class Profile extends AppCompatActivity {
             startActivity(intent);
         });
 
+        Toast.makeText(this, "Click on the fields you want to change.", Toast.LENGTH_LONG).show();
 
+        Button buttonLogin = findViewById(R.id.button_save_profile);
+        buttonLogin.setOnClickListener(view -> {
+            String fullName = editTextName.getText().toString().trim();
+            String[] nameParts = fullName.split(" ", 2);
+
+            String fname = "";
+            String lname = "";
+            String bio = editTextBio.getText().toString().trim();
+
+            if (nameParts.length == 1) {
+                fname = nameParts[0];
+                lname = "";
+            } else if (nameParts.length == 2) {
+                fname = nameParts[0];
+                lname = nameParts[1];
+            }
+            SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            String email = prefs.getString("user_email", "");
+
+
+            if (!email.isEmpty()) {
+                updateUserInDatabase(email, fname, lname, bio);
+            } else {
+                Toast.makeText(Profile.this, "No email saved. Cannot update profile.", Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
+
+            fetchUserFromDatabase();
+    }
+
+    private void fetchUserFromDatabase() {
+
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String email = prefs.getString("user_email", "");
+
+        if (email.isEmpty()) {
+            Toast.makeText(this, "No email saved. Cannot fetch profile.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("user_email", email)
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/getuser.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    Log.d("ServerResponse", json);
+
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        if (obj.getBoolean("success")) {
+                            String name = obj.getString("full_name");
+                            String bio = obj.getString("biography");
+
+                            runOnUiThread(() -> {
+                                editTextName.setText(name);
+                                editTextBio.setText(bio);
+                            });
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        });
+    }
+
+    private void updateUserInDatabase(String email, String fname, String lname, String bio) {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("user_email", email)
+                .add("user_fname", fname)
+                .add("user_lname", lname)
+                .add("user_biography", bio)
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/updateuser.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(Profile.this, "Update failed.", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    try {
+                        JSONObject obj = new JSONObject(json);
+                        if (obj.getBoolean("success")) {
+                            runOnUiThread(() ->
+                                    Toast.makeText(Profile.this, "Profile updated!", Toast.LENGTH_SHORT).show()
+                            );
+                        } else {
+                            String msg = obj.getString("message");
+                            runOnUiThread(() ->
+                                    Toast.makeText(Profile.this, "Update error: " + msg, Toast.LENGTH_SHORT).show()
+                            );
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        runOnUiThread(() ->
+                                Toast.makeText(Profile.this, "JSON error!", Toast.LENGTH_SHORT).show()
+                        );
+                    }
+                }
+            }
+
+        });
     }
 }

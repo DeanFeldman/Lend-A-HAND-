@@ -63,11 +63,11 @@
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email Address"
-            android:inputType="textEmailAddress"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="#CCCCCC"
-            android:padding="12dp"
-            android:layout_marginBottom="16dp" />
+            android:hint="Email Address (name@gmail.com)"
+            android:inputType="textEmailAddress"
+            android:padding="12dp" />
 
         <EditText
             android:id="@+id/input_password"

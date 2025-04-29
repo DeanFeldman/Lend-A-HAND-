@@ -53,11 +53,11 @@
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Enter your email"
+            android:layout_marginBottom="24dp"
             android:backgroundTint="#CCCCCC"
-            android:padding="12dp"
-            android:layout_marginBottom="24dp" />
+            android:hint="Enter your email (name@gmail.com)"
+            android:inputType="textEmailAddress"
+            android:padding="12dp" />
 
         <TextView
             android:layout_width="match_parent"
