@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.io.IOException;
 import okhttp3.Response;
 
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -67,7 +68,7 @@ public class Donorwall extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://lamp.ms.wits.ac.za/home/s2698600/DonorWall.php")
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/donor_wall.php")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -88,36 +89,72 @@ public class Donorwall extends AppCompatActivity {
     }
 
     private void populateLeaderboardFromJSON(String jsonData) {
-        try{
-            JSONArray jsonArray = new JSONArray(jsonData);
+        try {
+            JSONObject jsonObject = new JSONObject(jsonData);
+            JSONArray jsonArray = jsonObject.getJSONArray("leaderboard"); // <--- fix here
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject donor = jsonArray.getJSONObject(i);
-                String name = donor.getString("name");
-                double amount = donor.getInt("amount");
-                addDonorRow(i + 1, name, amount);
+
+                String firstName = donor.optString("first_name", "");
+                String lastName = donor.optString("last_name", "");
+                double amount = donor.optDouble("total_donated", 0);
+
+                String name = (firstName + " " + lastName).trim(); // combine names
+                if (name.isEmpty()) {
+                    name = "Anonymous";
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+                addDonorRow(i + 1, name, amount);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
-    private void addDonorRow(int position,String name,double amount){
+
+    private void addDonorRow(int position, String name, double amount) {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setPadding(16, 16, 16, 16);
 
-        TextView positionview = new TextView(this);
-        positionview.setText(position + ". ");
+        // Create layout params to share space
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1.0f // weight
+        );
+
+        TextView positionView = new TextView(this);
+        positionView.setText(position + ". ");
+        positionView.setTextSize(16); // Bigger text
+        positionView.setLayoutParams(params);
 
         TextView nameView = new TextView(this);
         nameView.setText(name);
+        nameView.setTextSize(18); // Bigger text
+        nameView.setTypeface(null, android.graphics.Typeface.BOLD);
+        nameView.setLayoutParams(params);
 
         TextView amountView = new TextView(this);
-        amountView.setText("R" + amount);
+        amountView.setText("R" + String.format("%.2f", amount));
+        amountView.setTextSize(16);
+        amountView.setLayoutParams(params);
+        amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
 
-        row.addView(positionview);
+        // Add views to the row
+        row.addView(positionView);
         row.addView(nameView);
         row.addView(amountView);
 
+        // Optionally add a small bottom divider
+        View divider = new View(this);
+        divider.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                2
+        ));
+        divider.setBackgroundColor(0xFFCCCCCC);
+
         leaderboard.addView(row);
+        leaderboard.addView(divider);
     }
+
 }
