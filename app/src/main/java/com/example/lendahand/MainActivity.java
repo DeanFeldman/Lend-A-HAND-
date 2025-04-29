@@ -50,14 +50,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+        //uncomment to test for login without vaidation
+//        Button buttonDonate = findViewById(R.id.button_login);
+//        buttonDonate.setOnClickListener(view -> {
+//            Intent intent = new Intent(MainActivity.this, Donorwall.class);
+//            startActivity(intent);
+//        });
+
         buttonLogin = findViewById(R.id.button_login);
          emailInput = findViewById(R.id.input_email);
          passwordInput = findViewById(R.id.input_password);
 
         buttonLogin.setOnClickListener(view -> {
             processLogin();
-
-
         });
     }
         private void processLogin() {
@@ -126,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
-        }
+
+}
 
 

@@ -97,7 +97,7 @@ public class SignUp extends AppCompatActivity {
         RequestBody formBody = new FormBody.Builder()
                 .add("user_fname", fname)
                 .add("user_lname", lname)
-                .add("user_dob", dob) // Default DOB (because your form doesn't have DOB input)
+                .add("user_dob", dob)
                 .add("user_email", email)
                 .add("user_password", password)
                 .add("user_biography", "")

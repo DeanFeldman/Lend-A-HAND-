@@ -44,7 +44,6 @@ public class Donorwall extends AppCompatActivity {
         leaderboard = findViewById(R.id.leaderboardContainer);
         fetchDonorsFromDatabase();
 
-
         Button buttonProfile = findViewById(R.id.button_Profile);
         buttonProfile.setOnClickListener(view -> {
             Intent intent = new Intent(Donorwall.this, Profile.class);
@@ -59,7 +58,7 @@ public class Donorwall extends AppCompatActivity {
 
         Button buttonRecieve = findViewById(R.id.button_Recieve);
         buttonRecieve.setOnClickListener(view -> {
-            Intent intent = new Intent(Donorwall.this, Donate.class);
+            Intent intent = new Intent(Donorwall.this, Recieve.class);
             startActivity(intent);
         });
     }
@@ -68,7 +67,7 @@ public class Donorwall extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url("https://edition.cnn.com/")        //NADAV INSERT HERE
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/DonorWall.php")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -77,8 +76,9 @@ public class Donorwall extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful() && response.body() != null) {
                     String responseData = response.body().string();
                     runOnUiThread(() -> populateLeaderboardFromJSON(responseData));
                 }
