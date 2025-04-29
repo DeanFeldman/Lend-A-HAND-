@@ -90,6 +90,7 @@ public class Donorwall extends AppCompatActivity {
 
     private void populateLeaderboardFromJSON(String jsonData) {
         try {
+            addDonorRowHeader();
             JSONObject jsonObject = new JSONObject(jsonData);
             JSONArray jsonArray = jsonObject.getJSONArray("leaderboard"); // <--- fix here
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -135,7 +136,52 @@ public class Donorwall extends AppCompatActivity {
         nameView.setLayoutParams(params);
 
         TextView amountView = new TextView(this);
-        amountView.setText("R" + String.format("%.2f", amount));
+        amountView.setText(String.valueOf((int) amount));
+        amountView.setTextSize(16);
+        amountView.setLayoutParams(params);
+        amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
+
+        // Add views to the row
+        row.addView(positionView);
+        row.addView(nameView);
+        row.addView(amountView);
+
+        // Optionally add a small bottom divider
+        View divider = new View(this);
+        divider.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                2
+        ));
+        divider.setBackgroundColor(0xFFCCCCCC);
+
+        leaderboard.addView(row);
+        leaderboard.addView(divider);
+    }
+    private void addDonorRowHeader() {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setPadding(16, 16, 16, 16);
+
+        // Create layout params to share space
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                0,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1.0f // weight
+        );
+
+        TextView positionView = new TextView(this);
+        positionView.setText("Position");
+        positionView.setTextSize(16); // Bigger text
+        positionView.setLayoutParams(params);
+
+        TextView nameView = new TextView(this);
+        nameView.setText("Name");
+        nameView.setTextSize(18); // Bigger text
+        nameView.setTypeface(null, android.graphics.Typeface.BOLD);
+        nameView.setLayoutParams(params);
+
+        TextView amountView = new TextView(this);
+        amountView.setText("Item's Donated");
         amountView.setTextSize(16);
         amountView.setLayoutParams(params);
         amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
