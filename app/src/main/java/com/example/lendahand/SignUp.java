@@ -91,6 +91,27 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
+        if (password.length() < 6) {
+            Toast.makeText(SignUp.this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasSpecial = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isLowerCase(c)) hasLower = true;
+            else if (!Character.isLetterOrDigit(c)) hasSpecial = true;
+        }
+
+        if (!hasUpper || !hasLower || !hasSpecial) {
+            Toast.makeText(SignUp.this, "Password must contain uppercase, lowercase, and special character.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         // Adjust this URL with your actual server username
         String url = "https://lamp.ms.wits.ac.za/home/s2698600/signup.php";
 
