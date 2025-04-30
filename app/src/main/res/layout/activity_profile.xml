@@ -83,12 +83,12 @@
             <EditText
                 android:id="@+id/input_bio"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="161dp"
+                android:layout_marginBottom="32dp"
                 android:backgroundTint="#CCCCCC"
                 android:gravity="top|start"
                 android:hint="Write a short biography or motivation..."
-                android:padding="12dp"
-                android:layout_marginBottom="32dp" />
+                android:padding="12dp" />
 
             <Button
                 android:id="@+id/button_save_profile"

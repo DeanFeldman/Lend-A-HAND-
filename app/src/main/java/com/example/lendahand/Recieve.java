@@ -12,8 +12,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class Recieve extends AppCompatActivity {
+import java.util.ArrayList;
 
+public class Recieve extends AppCompatActivity {
+    private Spinner spinnerItems;
+    private ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +47,23 @@ public class Recieve extends AppCompatActivity {
         });
 
         //fill the arrays
-        Spinner spinnerItems = findViewById(R.id.spinner_needed_items);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        spinnerItems = findViewById(R.id.spinner_needed_items);
+        adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                ItemList.ITEMS
-        );
+                new ArrayList<String>());
+
         spinnerItems.setAdapter(adapter);
+
+        new Thread(() -> {
+            ItemList list = new ItemList();
+            list.FetchItems(Recieve.this);
+
+            runOnUiThread(() -> {
+                adapter.clear();
+                adapter.addAll(ItemList.getItems());
+                adapter.notifyDataSetChanged();
+            });
+        }).start();
     }
 }

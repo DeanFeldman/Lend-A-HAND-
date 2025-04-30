@@ -3,7 +3,7 @@ package com.example.lendahand;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-
+import android.app.Activity;
 import android.content.Context;
 import org.json.JSONException;
 
@@ -41,19 +41,22 @@ public class ItemList {
                     ITEMS.add(item);
                 }
 
-                Toast.makeText(context, "Items fetched successfully", Toast.LENGTH_SHORT).show();
+                ((Activity) context).runOnUiThread(() ->
+                        Toast.makeText(context, "Items fetched successfully", Toast.LENGTH_SHORT).show()
+                );
 
-            }
-            else{
-                Toast.makeText(context, "Failed to fetch items", Toast.LENGTH_SHORT).show();
+            } else {
+                ((Activity) context).runOnUiThread(() ->
+                        Toast.makeText(context, "Failed to fetch items", Toast.LENGTH_SHORT).show()
+                );
             }
 
-        }
-        catch(IOException | JSONException e){
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Error fetching items", Toast.LENGTH_SHORT).show();
+            ((Activity) context).runOnUiThread(() ->
+                    Toast.makeText(context, "Error fetching items", Toast.LENGTH_SHORT).show()
+            );
         }
-
     }
 
     public static List<String> getItems() {

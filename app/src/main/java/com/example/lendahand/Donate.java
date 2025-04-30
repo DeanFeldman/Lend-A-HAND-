@@ -3,6 +3,7 @@ package com.example.lendahand;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import java.util.ArrayList;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -13,6 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class Donate extends AppCompatActivity {
+
+    private Spinner spinnerItems;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +48,24 @@ public class Donate extends AppCompatActivity {
         });
 
         //fill the arrays
-        Spinner spinnerItems = findViewById(R.id.spinner_items);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        spinnerItems = findViewById(R.id.spinner_items);
+        adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                ItemList.ITEMS
-        );
+                new ArrayList<String>());
+
         spinnerItems.setAdapter(adapter);
+
+        new Thread(() -> {
+            ItemList list = new ItemList();
+            list.FetchItems(Donate.this);
+
+            runOnUiThread(() -> {
+                adapter.clear();
+                adapter.addAll(ItemList.getItems());
+                adapter.notifyDataSetChanged();
+            });
+        }).start();
 
     }
 }

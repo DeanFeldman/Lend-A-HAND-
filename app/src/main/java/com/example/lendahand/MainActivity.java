@@ -116,6 +116,11 @@ public class MainActivity extends AppCompatActivity {
                                         editor.putString("user_email", email);
                                         editor.apply();
 
+//                                        SharedPreferences Prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//                                        SharedPreferences.Editor Editor = prefs.edit();
+//                                        editor.putString("user_id", email);
+//                                        editor.apply();
+
                                         Intent intent = new Intent(MainActivity.this, Donorwall.class);
                                         startActivity(intent);
                                         finish();
