@@ -2,9 +2,13 @@ package com.example.lendahand;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
+import java.util.List;
+
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
@@ -12,11 +16,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class Donate extends AppCompatActivity {
 
     private Spinner spinnerItems;
+    EditText qty;
     private ArrayAdapter<String> adapter;
+    private RecyclerView recyclerView;
+    private ReceiverAdapter receiverAdapter;
+    private List<Receiver> receiverList = new ArrayList<>();
+    private Button donateButton;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +41,16 @@ public class Donate extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        recyclerView = findViewById(R.id.receiver_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        receiverAdapter = new ReceiverAdapter(this, receiverList, this::checkDonationSum);
+        recyclerView.setAdapter(receiverAdapter);
+
+        qty = findViewById(R.id.input_quantity);
+        donateButton = findViewById(R.id.button_donate_to_receiver);
+        donateButton.setVisibility(View.GONE);
+
 
         Button buttonDonorWall = findViewById(R.id.button_DonorWall);
         buttonDonorWall.setOnClickListener(view -> {
@@ -47,6 +70,7 @@ public class Donate extends AppCompatActivity {
             startActivity(intent);
         });
 
+        qty = findViewById(R.id.input_quantity);
         //fill the arrays
         spinnerItems = findViewById(R.id.spinner_items);
         adapter = new ArrayAdapter<>(
@@ -66,6 +90,22 @@ public class Donate extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             });
         }).start();
-
     }
+
+    private void checkDonationSum() {
+        int total = 0;
+        for (Receiver r : receiverList) {
+            total += r.quantityToDonate;
+        }
+
+        int expected = 0;
+        try {
+            expected = Integer.parseInt(qty.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            expected = 0;
+        }
+
+        donateButton.setVisibility((total == expected && total > 0) ? View.VISIBLE : View.GONE);
+    }
+
 }

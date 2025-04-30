@@ -44,6 +44,7 @@ public class Profile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         editTextName = findViewById(R.id.input_name);
         editTextBio  = findViewById(R.id.input_bio);
         displayEmail = findViewById(R.id.display_email);

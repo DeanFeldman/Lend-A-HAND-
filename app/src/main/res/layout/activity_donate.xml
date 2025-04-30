@@ -76,16 +76,14 @@
                 android:textColor="#666666"
                 android:layout_marginBottom="8dp" />
 
-            <TextView
-                android:id="@+id/ListOfPpl"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/receiver_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:background="#EEEEEE"
-                android:padding="12dp"
-                android:text="List of people needing this item..."
-                android:textColor="#444444"
-                android:gravity="top|start"
-                android:layout_marginBottom="24dp" />
+                tools:listitem="@layout/item_receiver_row" />
+
 
             <Button
                 android:id="@+id/button_donate_to_receiver"
