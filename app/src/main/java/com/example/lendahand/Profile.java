@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -30,9 +31,10 @@ import okhttp3.Response;
 public class Profile extends AppCompatActivity {
         private EditText editTextName;
         private EditText editTextBio;
+        private TextView displayEmail;
 
 
-        @Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
@@ -43,9 +45,12 @@ public class Profile extends AppCompatActivity {
             return insets;
         });
         editTextName = findViewById(R.id.input_name);
-        editTextBio =    findViewById(R.id.input_bio);
+        editTextBio  = findViewById(R.id.input_bio);
+        displayEmail = findViewById(R.id.display_email);
 
-
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String email = prefs.getString("user_email", "");
+        displayEmail.setText(email);
 
         Button buttonDonorWall = findViewById(R.id.button_DonorWall);
         buttonDonorWall.setOnClickListener(view -> {
@@ -68,6 +73,7 @@ public class Profile extends AppCompatActivity {
         Toast.makeText(this, "Click on the fields you want to change.", Toast.LENGTH_LONG).show();
 
         Button buttonLogin = findViewById(R.id.button_save_profile);
+
         buttonLogin.setOnClickListener(view -> {
             String fullName = editTextName.getText().toString().trim();
             String[] nameParts = fullName.split(" ", 2);
@@ -83,9 +89,6 @@ public class Profile extends AppCompatActivity {
                 fname = nameParts[0];
                 lname = nameParts[1];
             }
-            SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-            String email = prefs.getString("user_email", "");
-
 
             if (!email.isEmpty()) {
                 updateUserInDatabase(email, fname, lname, bio);
@@ -96,7 +99,7 @@ public class Profile extends AppCompatActivity {
         });
 
 
-            fetchUserFromDatabase();
+        fetchUserFromDatabase();
     }
 
     private void fetchUserFromDatabase() {

@@ -2,6 +2,7 @@ package com.example.lendahand;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -109,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
                                 runOnUiThread(() -> {
                                     if (success) {
                                         Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+
+                                        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = prefs.edit();
+                                        editor.putString("user_email", email);
+                                        editor.apply();
+
                                         Intent intent = new Intent(MainActivity.this, Donorwall.class);
                                         startActivity(intent);
                                         finish();
