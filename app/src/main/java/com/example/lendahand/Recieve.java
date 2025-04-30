@@ -31,7 +31,7 @@ public class Recieve extends AppCompatActivity {
 
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs1", MODE_PRIVATE);
-        String email = prefs.getString("user_id", "");
+        int user_id = prefs.getInt("user_id", 0);
 
 
         Button buttonDonorWall = findViewById(R.id.button_donorwall);
