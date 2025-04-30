@@ -111,15 +111,8 @@ public class MainActivity extends AppCompatActivity {
                                         JSONObject userObject = null;
                                         try {
                                             userObject = json.getJSONObject("user");
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                        int userId = 0;
-                                        try {
-                                            userId = userObject.getInt("user_id");
-                                        } catch (JSONException e) {
-                                            throw new RuntimeException(e);
-                                        }
+                                            int userId = userObject.getInt("user_id");
+
 
                                         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = prefs.edit();
@@ -131,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                                         Intent intent = new Intent(MainActivity.this, Donorwall.class);
                                         startActivity(intent);
                                         finish();
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
                                     } else {
                                         String message = json.optString("message", "Login failed.");
                                         Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
