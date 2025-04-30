@@ -92,7 +92,7 @@ public class Donorwall extends AppCompatActivity {
         try {
             addDonorRowHeader();
             JSONObject jsonObject = new JSONObject(jsonData);
-            JSONArray jsonArray = jsonObject.getJSONArray("leaderboard"); // <--- fix here
+            JSONArray jsonArray = jsonObject.getJSONArray("leaderboard");
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject donor = jsonArray.getJSONObject(i);
 
@@ -100,7 +100,7 @@ public class Donorwall extends AppCompatActivity {
                 String lastName = donor.optString("last_name", "");
                 double amount = donor.optDouble("total_donated", 0);
 
-                String name = (firstName + " " + lastName).trim(); // combine names
+                String name = (firstName + " " + lastName).trim();
                 if (name.isEmpty()) {
                     name = "Anonymous";
                 }

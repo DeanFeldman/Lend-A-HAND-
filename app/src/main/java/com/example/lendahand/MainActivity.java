@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -51,12 +52,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //uncomment to test for login without vaidation
-//        Button buttonDonate = findViewById(R.id.button_login);
-//        buttonDonate.setOnClickListener(view -> {
-//            Intent intent = new Intent(MainActivity.this, Donorwall.class);
-//            startActivity(intent);
-//        });
 
         buttonLogin = findViewById(R.id.button_login);
          emailInput = findViewById(R.id.input_email);
@@ -107,19 +102,31 @@ public class MainActivity extends AppCompatActivity {
                                 JSONObject json = new JSONObject(responseData);
                                 boolean success = json.getBoolean("success");
 
+
+
                                 runOnUiThread(() -> {
                                     if (success) {
                                         Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
 
+                                        JSONObject userObject = null;
+                                        try {
+                                            userObject = json.getJSONObject("user");
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                        int userId = 0;
+                                        try {
+                                            userId = userObject.getInt("user_id");
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
                                         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                                         SharedPreferences.Editor editor = prefs.edit();
                                         editor.putString("user_email", email);
+                                        editor.putInt("user_id", userId);
                                         editor.apply();
 
-//                                        SharedPreferences Prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//                                        SharedPreferences.Editor Editor = prefs.edit();
-//                                        editor.putString("user_id", email);
-//                                        editor.apply();
 
                                         Intent intent = new Intent(MainActivity.this, Donorwall.class);
                                         startActivity(intent);
@@ -143,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             }
+        }
 
-}
 
 

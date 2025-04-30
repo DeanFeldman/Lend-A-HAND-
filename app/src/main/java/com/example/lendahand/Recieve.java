@@ -1,6 +1,7 @@
 package com.example.lendahand;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +28,11 @@ public class Recieve extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+
+        SharedPreferences prefs = getSharedPreferences("UserPrefs1", MODE_PRIVATE);
+        String email = prefs.getString("user_id", "");
+
 
         Button buttonDonorWall = findViewById(R.id.button_donorwall);
         buttonDonorWall.setOnClickListener(view -> {
