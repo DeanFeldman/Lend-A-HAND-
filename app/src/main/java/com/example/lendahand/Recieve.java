@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,11 +15,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 
 public class Recieve extends AppCompatActivity {
     private Spinner spinnerItems;
     private ArrayAdapter<String> adapter;
+    private EditText quantityInput;
+    private int user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,9 +44,35 @@ public class Recieve extends AppCompatActivity {
         });
 
 
-        SharedPreferences prefs = getSharedPreferences("UserPrefs1", MODE_PRIVATE);
-        int user_id = prefs.getInt("user_id", 0);
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        user_id = prefs.getInt("user_id", -1);
+        if (user_id == -1) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+        spinnerItems = findViewById(R.id.spinner_needed_items);
+        quantityInput = findViewById(R.id.input_needed_quantity);
+        Button submitButton = findViewById(R.id.button_add_request);
 
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>());
+        spinnerItems.setAdapter(adapter);
+
+        // Load item list (background thread)
+        new Thread(() -> {
+            ItemList list = new ItemList();
+            list.FetchItems(Recieve.this);
+
+            runOnUiThread(() -> {
+                adapter.clear();
+                adapter.addAll(ItemList.getItems());
+                adapter.notifyDataSetChanged();
+            });
+        }).start();
+
+        submitButton.setOnClickListener(v -> {
+            submitRequest();
+        });
 
         Button buttonDonorWall = findViewById(R.id.button_donorwall);
         buttonDonorWall.setOnClickListener(view -> {
@@ -71,5 +111,45 @@ public class Recieve extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             });
         }).start();
+    }
+    private void submitRequest() {
+        String itemName = spinnerItems.getSelectedItem().toString();
+        String quantityStr = quantityInput.getText().toString().trim();
+
+        if (quantityStr.isEmpty()) {
+            Toast.makeText(this, "Please enter quantity", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int quantity = Integer.parseInt(quantityStr);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+                .add("user_id", String.valueOf(user_id))
+                .add("item_name", itemName)
+                .add("quantity_needed", String.valueOf(quantity))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/submit_request.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(() ->
+                        Toast.makeText(Recieve.this, "Network error: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                runOnUiThread(() -> {
+                    Toast.makeText(Recieve.this, "Request submitted successfully!", Toast.LENGTH_SHORT).show();
+                    quantityInput.setText("");
+                });
+            }
+        });
     }
 }
