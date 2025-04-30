@@ -3,13 +3,20 @@ package com.example.lendahand;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +25,15 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class Donate extends AppCompatActivity {
 
@@ -79,6 +95,16 @@ public class Donate extends AppCompatActivity {
                 new ArrayList<String>());
 
         spinnerItems.setAdapter(adapter);
+        spinnerItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                fetchReceiversFromDatabase();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
 
         new Thread(() -> {
             ItemList list = new ItemList();
@@ -90,6 +116,55 @@ public class Donate extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             });
         }).start();
+
+
+    }
+
+    private void fetchReceiversFromDatabase() {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("item_name", spinnerItems.getSelectedItem().toString())
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/getneededreciever.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+
+                    try {
+                        JSONArray jsonArray = new JSONArray(json);
+                        receiverList.clear();
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject obj = jsonArray.getJSONObject(i);
+
+                            String name = obj.getString("user_fname") + " " + obj.getString("user_lname");
+                            String bio = obj.getString("user_biography");
+                            int needed = obj.getInt("quantity_needed");
+
+                            receiverList.add(new Receiver(0, name, bio, needed));
+                        }
+
+                        runOnUiThread(() -> receiverAdapter.notifyDataSetChanged());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
     private void checkDonationSum() {
