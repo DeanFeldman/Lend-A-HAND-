@@ -1,6 +1,7 @@
 package com.example.lendahand;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,12 +14,15 @@ import java.util.List;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -38,6 +42,7 @@ import okhttp3.Response;
 public class Donate extends AppCompatActivity {
 
     private Spinner spinnerItems;
+    private int user_id;
     EditText qty;
     private ArrayAdapter<String> adapter;
     private RecyclerView recyclerView;
@@ -64,9 +69,23 @@ public class Donate extends AppCompatActivity {
         recyclerView.setAdapter(receiverAdapter);
 
         qty = findViewById(R.id.input_quantity);
-        donateButton = findViewById(R.id.button_donate_to_receiver);
-        donateButton.setVisibility(View.GONE);
 
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        user_id = prefs.getInt("user_id", -1);
+        if (user_id == -1) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        donateButton = findViewById(R.id.button_donate_to_receiver);
+        donateButton.setOnClickListener(v -> {
+            for (Receiver r : receiverList) {
+                if (r.quantityToDonate > 0) {
+                    sendDonation(r);
+                }
+            }
+        });
 
         Button buttonDonorWall = findViewById(R.id.button_DonorWall);
         buttonDonorWall.setOnClickListener(view -> {
@@ -100,7 +119,6 @@ public class Donate extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 fetchReceiversFromDatabase();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
@@ -128,7 +146,7 @@ public class Donate extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("https://lamp.ms.wits.ac.za/home/s2698600/getneededreciever.php")
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/get_needed_items.php")
                 .post(formBody)
                 .build();
 
@@ -150,11 +168,13 @@ public class Donate extends AppCompatActivity {
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject obj = jsonArray.getJSONObject(i);
 
+                            int requestId = obj.getInt("request_id");
+                            int userId = obj.getInt("user_id");
                             String name = obj.getString("user_fname") + " " + obj.getString("user_lname");
                             String bio = obj.getString("user_biography");
                             int needed = obj.getInt("quantity_needed");
 
-                            receiverList.add(new Receiver(0, name, bio, needed));
+                            receiverList.add(new Receiver(requestId, userId, name, bio, needed));
                         }
 
                         runOnUiThread(() -> receiverAdapter.notifyDataSetChanged());
@@ -168,19 +188,108 @@ public class Donate extends AppCompatActivity {
     }
 
     private void checkDonationSum() {
-        int total = 0;
+        int totalAllocated = 0;
+        int totalAvailable = 0;
+
+
+        String input = qty.getText().toString().trim();
+        if (!input.isEmpty()) {
+            try {
+                totalAvailable = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                totalAvailable = 0;
+            }
+        }
+
+        // Sum allocations and validate per receiver
         for (Receiver r : receiverList) {
-            total += r.quantityToDonate;
+            if (r.quantityToDonate > r.quantityNeeded) {
+                donateButton.setVisibility(View.GONE);
+                Toast.makeText(this, "Cannot allocate more than " + r.quantityNeeded + " to " + r.name, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            totalAllocated += r.quantityToDonate;
         }
 
-        int expected = 0;
-        try {
-            expected = Integer.parseInt(qty.getText().toString().trim());
-        } catch (NumberFormatException e) {
-            expected = 0;
+        // Final logic: allow if totalAllocated > 0 and ≤ totalAvailable
+        if (totalAllocated > 0 && totalAllocated <= totalAvailable) {
+            donateButton.setVisibility(View.VISIBLE);
+        } else {
+            donateButton.setVisibility(View.GONE);
         }
-
-        donateButton.setVisibility((total == expected && total > 0) ? View.VISIBLE : View.GONE);
     }
 
+
+    private void sendDonation(Receiver r){
+        OkHttpClient client = new OkHttpClient();
+
+        int donor_user_id = user_id;
+        int request_id = r.getRequestId();
+        int quantity = r.quantityToDonate;
+
+        // 🔹 Calculate newRemaining BEFORE updating UI state
+        int newRemaining = r.quantityNeeded - quantity;
+
+        runOnUiThread(() -> {
+            // Update remaining quantity in the input box
+            String currentQtyStr = qty.getText().toString().trim();
+            int currentQty = 0;
+            try {
+                currentQty = Integer.parseInt(currentQtyStr);
+            } catch (NumberFormatException e) {
+                currentQty = 0;
+            }
+
+            int remaining = Math.max(0, currentQty - quantity);
+            qty.setText(String.valueOf(remaining));
+
+            // Update only after calculation
+            r.quantityNeeded = newRemaining;
+            r.quantityToDonate = 0;
+
+            Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
+            receiverAdapter.notifyDataSetChanged();
+            checkDonationSum();
+        });
+
+        // Send the correct value
+        RequestBody formBody = new FormBody.Builder()
+                .add("donor_user_id", String.valueOf(donor_user_id))
+                .add("request_id", String.valueOf(request_id))
+                .add("quantity_donated", String.valueOf(quantity))
+                .add("new_quantity_needed", String.valueOf(newRemaining))
+                .build();
+
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/send_donated_items.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback(){
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    runOnUiThread(() -> {
+                        r.quantityNeeded -= r.quantityToDonate;
+                        r.quantityToDonate = 0;
+
+                        Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
+                        receiverAdapter.notifyDataSetChanged();
+                        checkDonationSum();
+                    });
+                } else {
+                    runOnUiThread(() -> Toast.makeText(Donate.this, "Server error", Toast.LENGTH_SHORT).show());
+                }
+
+            }
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to send donation", Toast.LENGTH_SHORT).show());
+            }
+        });
+    }
 }

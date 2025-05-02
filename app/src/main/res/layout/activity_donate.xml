@@ -100,11 +100,11 @@
         </LinearLayout>
 
     </ScrollView>
-
     <LinearLayout
         android:id="@+id/bottom_button_bar_donate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:orientation="horizontal"
         android:background="@android:color/white"
         android:elevation="8dp"
@@ -145,11 +145,10 @@
             android:layout_weight="1"
             android:text="Request"
             android:textAllCaps="false"
-                android:backgroundTint="#002366"
+            android:backgroundTint="#002366"
             android:textColor="#FFFFFF"
             android:padding="12dp"
             android:elevation="2dp" />
-
     </LinearLayout>
 
 </LinearLayout>
