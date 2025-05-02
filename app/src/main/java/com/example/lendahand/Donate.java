@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -135,7 +136,6 @@ public class Donate extends AppCompatActivity {
             });
         }).start();
 
-
     }
 
     private void fetchReceiversFromDatabase() {
@@ -146,7 +146,7 @@ public class Donate extends AppCompatActivity {
                 .build();
 
         Request request = new Request.Builder()
-                .url("https://lamp.ms.wits.ac.za/home/s2698600/get_needed_items.php")
+                .url("https://lamp.ms.wits.ac.za/home/s2698 600/get_needed_items.php")
                 .post(formBody)
                 .build();
 
@@ -220,76 +220,84 @@ public class Donate extends AppCompatActivity {
     }
 
 
-    private void sendDonation(Receiver r){
+    private void sendDonation(Receiver r) {
         OkHttpClient client = new OkHttpClient();
 
         int donor_user_id = user_id;
         int request_id = r.getRequestId();
         int quantity = r.quantityToDonate;
-
-        // 🔹 Calculate newRemaining BEFORE updating UI state
         int newRemaining = r.quantityNeeded - quantity;
 
-        runOnUiThread(() -> {
-            // Update remaining quantity in the input box
-            String currentQtyStr = qty.getText().toString().trim();
-            int currentQty = 0;
-            try {
-                currentQty = Integer.parseInt(currentQtyStr);
-            } catch (NumberFormatException e) {
-                currentQty = 0;
-            }
 
-            int remaining = Math.max(0, currentQty - quantity);
-            qty.setText(String.valueOf(remaining));
-
-            // Update only after calculation
-            r.quantityNeeded = newRemaining;
-            r.quantityToDonate = 0;
-
-            Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
-            receiverAdapter.notifyDataSetChanged();
-            checkDonationSum();
-        });
-
-        // Send the correct value
-        RequestBody formBody = new FormBody.Builder()
+        RequestBody donationForm = new FormBody.Builder()
                 .add("donor_user_id", String.valueOf(donor_user_id))
                 .add("request_id", String.valueOf(request_id))
                 .add("quantity_donated", String.valueOf(quantity))
-                .add("new_quantity_needed", String.valueOf(newRemaining))
                 .build();
 
-
-        Request request = new Request.Builder()
+        Request insertDonationRequest = new Request.Builder()
                 .url("https://lamp.ms.wits.ac.za/home/s2698600/send_donated_items.php")
-                .post(formBody)
+                .post(donationForm)
                 .build();
 
-        client.newCall(request).enqueue(new okhttp3.Callback(){
+        client.newCall(insertDonationRequest).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> Toast.makeText(Donate.this, "Donation insert failed", Toast.LENGTH_SHORT).show());
+            }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    runOnUiThread(() -> {
-                        r.quantityNeeded -= r.quantityToDonate;
-                        r.quantityToDonate = 0;
-
-                        Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
-                        receiverAdapter.notifyDataSetChanged();
-                        checkDonationSum();
-                    });
-                } else {
-                    runOnUiThread(() -> Toast.makeText(Donate.this, "Server error", Toast.LENGTH_SHORT).show());
+                if (!response.isSuccessful()) {
+                    runOnUiThread(() -> Toast.makeText(Donate.this, "Insert donation error", Toast.LENGTH_SHORT).show());
+                    return;
                 }
 
-            }
 
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to send donation", Toast.LENGTH_SHORT).show());
+                RequestBody updateForm = new FormBody.Builder()
+                        .add("request_id", String.valueOf(request_id))
+                        .add("new_quantity", String.valueOf(newRemaining))
+                        .build();
+
+                Request updateRequest = new Request.Builder()
+                        .url("https://lamp.ms.wits.ac.za/home/s2698600/update_request_items.php")
+                        .post(updateForm)
+                        .build();
+
+                client.newCall(updateRequest).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        runOnUiThread(() -> Toast.makeText(Donate.this, "Request update failed", Toast.LENGTH_SHORT).show());
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                        if (!response.isSuccessful()) {
+                            runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to update request", Toast.LENGTH_SHORT).show());
+                            return;
+                        }
+                        runOnUiThread(() -> {
+                            r.quantityNeeded = newRemaining;
+                            r.quantityToDonate = 0;
+
+                            int currentQty = 0;
+                            try {
+                                currentQty = Integer.parseInt(qty.getText().toString().trim());
+                            } catch (NumberFormatException e) {
+                                currentQty = 0;
+                            }
+
+                            int updatedQty = Math.max(0, currentQty - quantity);
+                            qty.setText(String.valueOf(updatedQty));
+
+                            Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
+                            receiverAdapter.notifyDataSetChanged();
+                            checkDonationSum();
+                        });
+                    }
+                });
             }
         });
     }
+
 }
