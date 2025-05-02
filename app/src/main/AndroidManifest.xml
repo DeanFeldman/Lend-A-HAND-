@@ -18,10 +18,6 @@
             android:name=".Recieve"
             android:exported="false" />
         <activity
-            android:name=".Request"
-            android:exported="false"
-            android:theme="@style/Theme.LendAHAND" />
-        <activity
             android:name=".Donate"
             android:exported="false" />
         <activity

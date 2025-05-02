@@ -54,8 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         buttonLogin = findViewById(R.id.button_login);
-         emailInput = findViewById(R.id.input_email);
-         passwordInput = findViewById(R.id.input_password);
+        emailInput = findViewById(R.id.input_email);
+        passwordInput = findViewById(R.id.input_password);
+
+
 
         buttonLogin.setOnClickListener(view -> {
             processLogin();
