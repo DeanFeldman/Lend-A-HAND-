@@ -1,0 +1,99 @@
+package com.example.lendahand;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import java.io.IOException;
+import org.json.JSONObject;
+
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+public class ForgotPassword extends AppCompatActivity {
+    EditText emailInput, newPasswordInput;
+    Button resetButton;
+    OkHttpClient client = new OkHttpClient();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_forgot_password);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.ForgotPassword), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        emailInput = findViewById(R.id.input_email);
+        newPasswordInput = findViewById(R.id.input_new_password);
+        resetButton = findViewById(R.id.button_reset_password);
+
+        resetButton.setOnClickListener(v -> resetPassword());
+    }
+
+    public void resetPassword() {
+        String email = emailInput.getText().toString().trim();
+        String newPassword = newPasswordInput.getText().toString().trim();
+
+        if (email.isEmpty() || newPassword.isEmpty()) {
+            CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Please enter your email and new password");
+            return;
+        }
+        RequestBody formbody = new FormBody.Builder()
+                .add("user_email",email)
+                .add("new_password", newPassword)
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/forgot_password.php")
+                .post(formbody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() ->
+                        CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Network Error: " + e.getMessage()));
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                final String res = response.body().string();
+                runOnUiThread(() -> {
+                    try{
+                        JSONObject json = new JSONObject(res);
+                        boolean success = json.getBoolean("success");
+                        String message = json.getString("message");
+
+                        CUSTOMTOAST.showCustomToast(ForgotPassword.this, message);
+                        if(success){
+                            Intent intent = new Intent(ForgotPassword.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                    catch(Exception e){
+                        CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Error: " + e.getMessage());
+                    }
+                });
+            }
+        });
+
+    }
+
+}
+

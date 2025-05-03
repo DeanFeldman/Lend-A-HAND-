@@ -174,7 +174,7 @@ public class Donorwall extends AppCompatActivity {
         nameView.setLayoutParams(params);
 
         TextView amountView = new TextView(this);
-        amountView.setText("Item's Donated");
+        amountView.setText("Items Donated");
         amountView.setTextSize(16);
         amountView.setLayoutParams(params);
         amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);

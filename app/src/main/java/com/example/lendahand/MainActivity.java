@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        TextView Forgotpassword = findViewById(R.id.text_forgot_password);
+        Forgotpassword.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, ForgotPassword.class);
+            startActivity(intent);
+        });
+
         TextView textLogin = findViewById(R.id.here);
         textLogin.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SignUp.class);
