@@ -51,7 +51,6 @@ public class Donate extends AppCompatActivity {
     private Button donateButton;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +72,7 @@ public class Donate extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", -1);
         if (user_id == -1) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(this, "User not logged in");
             finish();
             return;
         }
@@ -114,6 +113,7 @@ public class Donate extends AppCompatActivity {
                 new ArrayList<String>());
 
         spinnerItems.setAdapter(adapter);
+
         spinnerItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -122,7 +122,6 @@ public class Donate extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
         });
-
 
         new Thread(() -> {
             ItemList list = new ItemList();
@@ -134,7 +133,6 @@ public class Donate extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             });
         }).start();
-
 
     }
 
@@ -204,7 +202,7 @@ public class Donate extends AppCompatActivity {
         for (Receiver r : receiverList) {
             if (r.quantityToDonate > r.quantityNeeded) {
                 donateButton.setVisibility(View.GONE);
-                Toast.makeText(this, "Cannot allocate more than " + r.quantityNeeded + " to " + r.name, Toast.LENGTH_SHORT).show();
+                CUSTOMTOAST.showCustomToast(this, "Cannot allocate more than " + r.quantityNeeded + " to " + r.name);
                 return;
             }
             totalAllocated += r.quantityToDonate;
@@ -243,7 +241,7 @@ public class Donate extends AppCompatActivity {
             r.quantityNeeded = newRemaining;
             r.quantityToDonate = 0;
 
-            Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(Donate.this, "Donation sent!");
             receiverAdapter.notifyDataSetChanged();
             checkDonationSum();
         });
@@ -282,31 +280,31 @@ public class Donate extends AppCompatActivity {
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             if(response.isSuccessful()){
                                 runOnUiThread(() ->{
-                                    Toast.makeText(Donate.this, "Donation sent & record updated!", Toast.LENGTH_SHORT).show();
+                                    CUSTOMTOAST.showCustomToast(Donate.this, "Donation sent & record updated!");
                                     receiverAdapter.notifyDataSetChanged();
                                     checkDonationSum();
                                 });
                             }
                             else{
-                                runOnUiThread(() -> Toast.makeText(Donate.this, "Request update failed", Toast.LENGTH_SHORT).show());
+                                runOnUiThread(() ->  CUSTOMTOAST.showCustomToast(Donate.this, "Request update failed"));
                             }
                         }
 
                         @Override
                         public void onFailure(@NonNull Call call, @NonNull IOException e) {
                             e.printStackTrace();
-                            runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to update request", Toast.LENGTH_SHORT).show());
+                            runOnUiThread(() ->  CUSTOMTOAST.showCustomToast(Donate.this, "Failed to update request"));
                         }
                     });
                 } else {
-                    runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to record donation", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() ->  CUSTOMTOAST.showCustomToast(Donate.this, "Failed to record donation"));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to send donation", Toast.LENGTH_SHORT).show());
+                runOnUiThread(() ->  CUSTOMTOAST.showCustomToast(Donate.this, "Failed to send donation"));
             }
         });
     }

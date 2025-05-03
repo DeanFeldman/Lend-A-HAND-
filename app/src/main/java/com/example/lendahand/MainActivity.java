@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 String password = passwordInput.getText().toString().trim();
 
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                    CUSTOMTOAST.showCustomToast(MainActivity.this, "Please enter email and password");
                     return;
                 }
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 runOnUiThread(() -> {
                                     if (success) {
-                                        Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                                        CUSTOMTOAST.showCustomToast(MainActivity.this, "Signup successful!");
 
                                         JSONObject userObject = null;
                                         try {
@@ -124,18 +124,18 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     } else {
                                         String message = json.optString("message", "Login failed.");
-                                        Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+                                        CUSTOMTOAST.showCustomToast(MainActivity.this, message);
                                     }
                                 });
 
                             } catch (Exception e) {
                                 runOnUiThread(() ->
-                                        Toast.makeText(MainActivity.this, "Parsing Error: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                                        CUSTOMTOAST.showCustomToast(MainActivity.this, "Parsing Error: " + e.getMessage())
                                 );
                             }
                         } else {
                             runOnUiThread(() ->
-                                    Toast.makeText(MainActivity.this, "Server Error: " + response.message(), Toast.LENGTH_LONG).show()
+                                    CUSTOMTOAST.showCustomToast(MainActivity.this, "Server Error: " + response.message())
                             );
                         }
                     }

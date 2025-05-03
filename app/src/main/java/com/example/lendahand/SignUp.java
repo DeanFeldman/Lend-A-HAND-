@@ -31,7 +31,8 @@ import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
     Button buttonSignUp;
-    EditText txtFName , txtLName , txtEmail, txtPassword, txtDOB;
+    EditText txtFName , txtLName , txtEmail, txtPassword;
+    DatePicker dtpDOB;
     OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -50,69 +51,80 @@ public class SignUp extends AppCompatActivity {
         txtEmail = findViewById(R.id.input_email);
         txtPassword = findViewById(R.id.input_password);
         buttonSignUp = findViewById(R.id.button_signup);
-        txtDOB=findViewById(R.id.input_dob);
-        txtDOB.setOnClickListener(view -> showDatePicker());
+        dtpDOB = findViewById(R.id.input_dob);
 
         buttonSignUp.setOnClickListener(view -> {
            processSignUp();
         });
 
     }
-    private void showDatePicker() {
 
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                SignUp.this,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-
-                    String dob = selectedYear + "-" + String.format("%02d", selectedMonth + 1) + "-" + String.format("%02d", selectedDay);
-                    txtDOB.setText(dob);
-                },
-                year, month, day);
-
-        datePickerDialog.show();
-    }
     private void processSignUp() {
         String fname = txtFName.getText().toString().trim();
         String lname = txtLName.getText().toString().trim();
         String email = txtEmail.getText().toString().trim();
         String password = txtPassword.getText().toString().trim();
-        String dob = txtDOB.getText().toString().trim();
 
+        int day = dtpDOB.getDayOfMonth();
+        int month = dtpDOB.getMonth();
+        int year = dtpDOB.getYear();
 
+        String dob = String.format("%04d-%02d-%02d", year, month + 1, day);
+
+        //check age is > 18 years old
+        Calendar calendarDOB = Calendar.getInstance();
+        calendarDOB.set(year, month, day);
+        Calendar calendarToday = Calendar.getInstance();
+        int age = calendarToday.get(Calendar.YEAR) - calendarDOB.get(Calendar.YEAR);
+
+        //adjusts if the person hasnt had their birthday yet
+        if (calendarToday.get(Calendar.DAY_OF_YEAR) < calendarDOB.get(Calendar.DAY_OF_YEAR)) {
+            age--;
+        }
+        if(age < 18){
+            CUSTOMTOAST.showCustomToast(this, "You must be atleast 18 years old");
+            return;
+        }
+        if(calendarDOB.after(calendarToday)){
+            CUSTOMTOAST.showCustomToast(this, "Date of Birth Cannot be in the future");
+            return;
+        }
+
+        //checks empty
         if (TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(SignUp.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        //password >6 chars
         if (password.length() < 6) {
-            Toast.makeText(SignUp.this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(SignUp.this, "Password must be at least 6 characters long.");
             return;
         }
-
+        //checks the password contains uppercase, lowercase and special character
         boolean hasUpper = false;
         boolean hasLower = false;
         boolean hasSpecial = false;
 
         for (char c : password.toCharArray()) {
-            if (Character.isUpperCase(c)) hasUpper = true;
-            else if (Character.isLowerCase(c)) hasLower = true;
-            else if (!Character.isLetterOrDigit(c)) hasSpecial = true;
+            if (Character.isUpperCase(c)){
+                hasUpper = true;
+            }
+            else if (Character.isLowerCase(c)){
+                hasLower = true;
+            }
+            else if (!Character.isLetterOrDigit(c)){
+                hasSpecial = true;
+            }
         }
 
         if (!hasUpper || !hasLower || !hasSpecial) {
-            Toast.makeText(SignUp.this, "Password must contain uppercase, lowercase, and special character.", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(SignUp.this, "Password must contain uppercase, lowercase, and special character.");
             return;
         }
 
-
+        //send new user to db
         String url = "https://lamp.ms.wits.ac.za/home/s2698600/signup.php";
-
         RequestBody formBody = new FormBody.Builder()
                 .add("user_fname", fname)
                 .add("user_lname", lname)
@@ -131,7 +143,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() ->
-                        Toast.makeText(SignUp.this, "Network Error: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                        CUSTOMTOAST.showCustomToast(SignUp.this, "Network Error: " + e.getMessage())
                 );
             }
 
@@ -145,24 +157,25 @@ public class SignUp extends AppCompatActivity {
 
                         runOnUiThread(() -> {
                             if (success) {
-                                Toast.makeText(SignUp.this, "Signup successful! Please login.", Toast.LENGTH_SHORT).show();
+                                CUSTOMTOAST.showCustomToast(SignUp.this, "Signup successful! Please login.");
+
                                 Intent intent = new Intent(SignUp.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
                             } else {
                                 String message = json.optString("message", "Signup failed.");
-                                Toast.makeText(SignUp.this, message, Toast.LENGTH_SHORT).show();
+                                CUSTOMTOAST.showCustomToast(SignUp.this, message);
                             }
                         });
 
                     } catch (Exception e) {
                         runOnUiThread(() ->
-                                Toast.makeText(SignUp.this, "Parsing Error: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                                CUSTOMTOAST.showCustomToast(SignUp.this, "Parsing Error: " + e.getMessage())
                         );
                     }
                 } else {
                     runOnUiThread(() ->
-                            Toast.makeText(SignUp.this, "Server Error: " + response.message(), Toast.LENGTH_LONG).show()
+                            CUSTOMTOAST.showCustomToast(SignUp.this, "Server Error: " + response.message())
                     );
                 }
             }

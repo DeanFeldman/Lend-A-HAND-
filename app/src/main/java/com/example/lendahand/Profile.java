@@ -71,7 +71,7 @@ public class Profile extends AppCompatActivity {
             startActivity(intent);
         });
 
-        Toast.makeText(this, "Click on the fields you want to change.", Toast.LENGTH_LONG).show();
+        CUSTOMTOAST.showCustomToast(this, "Click on the fields you want to change.");
 
         Button buttonLogin = findViewById(R.id.button_save_profile);
 
@@ -94,7 +94,7 @@ public class Profile extends AppCompatActivity {
             if (!email.isEmpty()) {
                 updateUserInDatabase(email, fname, lname, bio);
             } else {
-                Toast.makeText(Profile.this, "No email saved. Cannot update profile.", Toast.LENGTH_SHORT).show();
+                CUSTOMTOAST.showCustomToast(Profile.this, "No email saved. Cannot update profile.");
             }
 
         });
@@ -109,7 +109,7 @@ public class Profile extends AppCompatActivity {
         String email = prefs.getString("user_email", "");
 
         if (email.isEmpty()) {
-            Toast.makeText(this, "No email saved. Cannot fetch profile.", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(this, "No email saved. Cannot fetch profile.");
             return;
         }
 
@@ -134,7 +134,6 @@ public class Profile extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String json = response.body().string();
-                    Log.d("ServerResponse", json);
 
                     try {
                         JSONObject obj = new JSONObject(json);

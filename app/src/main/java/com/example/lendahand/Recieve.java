@@ -47,7 +47,7 @@ public class Recieve extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", -1);
         if (user_id == -1) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(this, "User not logged in");
             finish();
             return;
         }
@@ -92,7 +92,6 @@ public class Recieve extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //fill the arrays
         spinnerItems = findViewById(R.id.spinner_needed_items);
         adapter = new ArrayAdapter<>(
                 this,
@@ -117,7 +116,7 @@ public class Recieve extends AppCompatActivity {
         String quantityStr = quantityInput.getText().toString().trim();
 
         if (quantityStr.isEmpty()) {
-            Toast.makeText(this, "Please enter quantity", Toast.LENGTH_SHORT).show();
+            CUSTOMTOAST.showCustomToast(this, "Please enter quantity");
             return;
         }
 
@@ -139,14 +138,14 @@ public class Recieve extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 runOnUiThread(() ->
-                        Toast.makeText(Recieve.this, "Network error: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                        CUSTOMTOAST.showCustomToast(Recieve.this, "Network error: " + e.getMessage())
                 );
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 runOnUiThread(() -> {
-                    Toast.makeText(Recieve.this, "Request submitted successfully!", Toast.LENGTH_SHORT).show();
+                    CUSTOMTOAST.showCustomToast(Recieve.this, "Request submitted successfully!");
                     quantityInput.setText("");
                 });
             }

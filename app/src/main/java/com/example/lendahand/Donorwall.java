@@ -113,21 +113,20 @@ public class Donorwall extends AppCompatActivity {
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setPadding(16, 16, 16, 16);
 
-        // Create layout params to share space
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f // weight
+                1.0f
         );
 
         TextView positionView = new TextView(this);
         positionView.setText(position + ". ");
-        positionView.setTextSize(16); // Bigger text
+        positionView.setTextSize(16);
         positionView.setLayoutParams(params);
 
         TextView nameView = new TextView(this);
         nameView.setText(name);
-        nameView.setTextSize(18); // Bigger text
+        nameView.setTextSize(18);
         nameView.setTypeface(null, android.graphics.Typeface.BOLD);
         nameView.setLayoutParams(params);
 
@@ -137,12 +136,11 @@ public class Donorwall extends AppCompatActivity {
         amountView.setLayoutParams(params);
         amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
 
-        // Add views to the row
         row.addView(positionView);
         row.addView(nameView);
         row.addView(amountView);
 
-        // Optionally add a small bottom divider
+
         View divider = new View(this);
         divider.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -158,21 +156,20 @@ public class Donorwall extends AppCompatActivity {
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setPadding(16, 16, 16, 16);
 
-        // Create layout params to share space
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 0,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f // weight
+                1.0f
         );
 
         TextView positionView = new TextView(this);
         positionView.setText("Position");
-        positionView.setTextSize(16); // Bigger text
+        positionView.setTextSize(16);
         positionView.setLayoutParams(params);
 
         TextView nameView = new TextView(this);
         nameView.setText("Name");
-        nameView.setTextSize(18); // Bigger text
+        nameView.setTextSize(18);
         nameView.setTypeface(null, android.graphics.Typeface.BOLD);
         nameView.setLayoutParams(params);
 
@@ -182,12 +179,12 @@ public class Donorwall extends AppCompatActivity {
         amountView.setLayoutParams(params);
         amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
 
-        // Add views to the row
+
         row.addView(positionView);
         row.addView(nameView);
         row.addView(amountView);
 
-        // Optionally add a small bottom divider
+
         View divider = new View(this);
         divider.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
