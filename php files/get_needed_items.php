@@ -9,7 +9,6 @@ if (!$item_name) {
     exit;
 }
 
-$response = array();
 $data = array();
 
 $stmt = $link->prepare("
