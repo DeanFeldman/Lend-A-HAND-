@@ -41,9 +41,6 @@ public class ItemList {
                     ITEMS.add(item);
                 }
 
-                ((Activity) context).runOnUiThread(() ->
-                        Toast.makeText(context, "Items fetched successfully", Toast.LENGTH_SHORT).show()
-                );
 
             } else {
                 ((Activity) context).runOnUiThread(() ->

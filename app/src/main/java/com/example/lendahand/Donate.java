@@ -171,8 +171,11 @@ public class Donate extends AppCompatActivity {
                             String name = obj.getString("user_fname") + " " + obj.getString("user_lname");
                             String bio = obj.getString("user_biography");
                             int needed = obj.getInt("quantity_needed");
-
-                            receiverList.add(new Receiver(requestId, userId, name, bio, needed));
+                            SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            int user_id = prefs.getInt("user_id", -1);
+                            if(user_id!=userId) {
+                                receiverList.add(new Receiver(requestId, userId, name, bio, needed));
+                            }
                         }
 
                         runOnUiThread(() -> receiverAdapter.notifyDataSetChanged());

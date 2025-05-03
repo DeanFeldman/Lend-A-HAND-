@@ -196,12 +196,12 @@ public class Profile extends AppCompatActivity {
                         JSONObject obj = new JSONObject(json);
                         if (obj.getBoolean("success")) {
                             runOnUiThread(() ->
-                                    Toast.makeText(Profile.this, "Profile updated!", Toast.LENGTH_SHORT).show()
+                                    CUSTOMTOAST.showCustomToast(Profile.this, "Profile updated!")
                             );
                         } else {
                             String msg = obj.getString("message");
                             runOnUiThread(() ->
-                                    Toast.makeText(Profile.this, "Update error: " + msg, Toast.LENGTH_SHORT).show()
+                                    CUSTOMTOAST.showCustomToast(Profile.this, "Update error: " + msg)
                             );
                         }
                     } catch (JSONException e) {
