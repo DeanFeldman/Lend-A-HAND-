@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:hint="Enter your email"
             android:inputType="textEmailAddress"
             android:padding="12dp" />
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:hint="Enter your password"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:padding="12dp"
             android:layout_marginBottom="24dp" />
 

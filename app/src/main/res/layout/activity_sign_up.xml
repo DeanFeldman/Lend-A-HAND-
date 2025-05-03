@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:hint="First Name"
             android:inputType="textPersonName"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:hint="Surname"
             android:inputType="textPersonName"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
@@ -62,7 +62,7 @@
             android:layout_width="match_parent"
             android:layout_height="407dp"
             android:layout_marginBottom="24dp"
-            android:backgroundTint="#CCCCCC" />
+            android:backgroundTint="#888888" />
 
         <EditText
             android:id="@+id/input_email"
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:hint="Email Address"
             android:inputType="textEmailAddress"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:hint="Password"
             android:inputType="textPassword"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:hint="Confirm Password"
             android:inputType="textPassword"
-            android:backgroundTint="#CCCCCC"
+            android:backgroundTint="#888888"
             android:padding="12dp"
             android:layout_marginBottom="24dp" />
 

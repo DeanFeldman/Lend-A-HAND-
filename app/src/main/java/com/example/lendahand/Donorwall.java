@@ -109,6 +109,7 @@ public class Donorwall extends AppCompatActivity {
     }
 
     private void addDonorRow(int position, String name, double amount) {
+
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setPadding(16, 16, 16, 16);
@@ -147,6 +148,10 @@ public class Donorwall extends AppCompatActivity {
                 2
         ));
         divider.setBackgroundColor(0xFFCCCCCC);
+
+        positionView.setTextColor(0xFF222222);
+        nameView.setTextColor(0xFF222222);
+        amountView.setTextColor(0xFF222222);
 
         leaderboard.addView(row);
         leaderboard.addView(divider);
@@ -191,6 +196,10 @@ public class Donorwall extends AppCompatActivity {
                 2
         ));
         divider.setBackgroundColor(0xFFCCCCCC);
+
+        positionView.setTextColor(0xFF222222);
+        nameView.setTextColor(0xFF222222);
+        amountView.setTextColor(0xFF222222);
 
         leaderboard.addView(row);
         leaderboard.addView(divider);
