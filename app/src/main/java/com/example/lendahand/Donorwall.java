@@ -101,10 +101,6 @@ public class Donorwall extends AppCompatActivity {
                 double amount = donor.optDouble("total_donated", 0);
 
                 String name = (firstName + " " + lastName).trim();
-                if (name.isEmpty()) {
-                    name = "Anonymous";
-                }
-
                 addDonorRow(i + 1, name, amount);
             }
         } catch (JSONException e) {
