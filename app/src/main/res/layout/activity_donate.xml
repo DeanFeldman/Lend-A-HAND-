@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA"
+    android:background="@drawable/gradient_background"
     tools:context=".Donate">
 
     <ScrollView
@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:padding="24dp">
 
         <LinearLayout
             android:id="@+id/donateContainer"
@@ -21,9 +22,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@android:color/white"
-            android:elevation="4dp"
+            android:elevation="6dp"
             android:padding="32dp"
-            android:layout_margin="16dp">
+            android:layout_margin="8dp"
+            android:clipToPadding="false">
 
             <TextView
                 android:id="@+id/donate_title"
@@ -32,8 +34,8 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="32dp"
                 android:text="Donate Items"
-                android:textSize="28sp"
-                android:textColor="#333333"
+                android:textSize="26sp"
+                android:textColor="#1A237E"
                 android:textStyle="bold" />
 
             <TextView
@@ -41,14 +43,14 @@
                 android:layout_height="wrap_content"
                 android:text="Select Item"
                 android:textSize="16sp"
-                android:textColor="#666666"
+                android:textColor="#555555"
                 android:layout_marginBottom="8dp" />
 
             <Spinner
                 android:id="@+id/spinner_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#888888"
+                android:backgroundTint="#616161"
                 android:layout_marginBottom="24dp" />
 
             <TextView
@@ -56,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:text="Select Quantity to Donate"
                 android:textSize="16sp"
-                android:textColor="#666666"
+                android:textColor="#555555"
                 android:layout_marginBottom="8dp" />
 
             <EditText
@@ -65,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter quantity"
                 android:inputType="number"
-                android:backgroundTint="#888888"
+                android:backgroundTint="#616161"
                 android:padding="12dp"
                 android:layout_marginBottom="24dp" />
 
@@ -74,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:text="Receivers Needing This Item"
                 android:textSize="16sp"
-                android:textColor="#666666"
+                android:textColor="#555555"
                 android:layout_marginBottom="8dp" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -84,7 +86,6 @@
                 android:layout_marginBottom="24dp"
                 android:background="#EEEEEE"
                 tools:listitem="@layout/item_receiver_row" />
-
 
             <Button
                 android:id="@+id/button_donate_to_receiver"
@@ -97,15 +98,13 @@
                 android:backgroundTint="#2979FF"
                 android:padding="14dp"
                 android:elevation="2dp" />
-
         </LinearLayout>
-
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/bottom_button_bar_donate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:orientation="horizontal"
         android:background="@android:color/white"
         android:elevation="8dp"
@@ -134,8 +133,7 @@
             android:textAllCaps="false"
             android:backgroundTint="#002366"
             android:textColor="#FFFFFF"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginHorizontal="8dp"
             android:padding="12dp"
             android:elevation="2dp" />
 
@@ -151,5 +149,4 @@
             android:padding="12dp"
             android:elevation="2dp" />
     </LinearLayout>
-
 </LinearLayout>

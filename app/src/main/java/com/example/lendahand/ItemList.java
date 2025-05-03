@@ -44,14 +44,14 @@ public class ItemList {
 
             } else {
                 ((Activity) context).runOnUiThread(() ->
-                        Toast.makeText(context, "Failed to fetch items", Toast.LENGTH_SHORT).show()
+                        CUSTOMTOAST.showCustomToast(context, "Failed to fetch items")
                 );
             }
 
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             ((Activity) context).runOnUiThread(() ->
-                    Toast.makeText(context, "Error fetching items", Toast.LENGTH_SHORT).show()
+                    CUSTOMTOAST.showCustomToast(context, "Error fetching items")
             );
         }
     }

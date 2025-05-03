@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -43,6 +44,12 @@ public class ForgotPassword extends AppCompatActivity {
         resetButton = findViewById(R.id.button_reset_password);
 
         resetButton.setOnClickListener(v -> resetPassword());
+
+        TextView textBackToLogin = findViewById(R.id.text_back_to_login);
+        textBackToLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(ForgotPassword.this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 
     public void resetPassword() {
