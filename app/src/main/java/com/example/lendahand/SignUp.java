@@ -30,7 +30,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
-    Button buttonLogin, buttonSignUp;
+    Button buttonSignUp;
     EditText txtFName , txtLName , txtEmail, txtPassword, txtDOB;
     OkHttpClient client = new OkHttpClient();
 
@@ -59,17 +59,17 @@ public class SignUp extends AppCompatActivity {
 
     }
     private void showDatePicker() {
-        // Create a Calendar instance
+
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // Create a DatePickerDialog
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 SignUp.this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Format the date correctly (Month +1 because January = 0)
+
                     String dob = selectedYear + "-" + String.format("%02d", selectedMonth + 1) + "-" + String.format("%02d", selectedDay);
                     txtDOB.setText(dob);
                 },
@@ -83,7 +83,6 @@ public class SignUp extends AppCompatActivity {
         String email = txtEmail.getText().toString().trim();
         String password = txtPassword.getText().toString().trim();
         String dob = txtDOB.getText().toString().trim();
-
 
 
         if (TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
@@ -112,7 +111,6 @@ public class SignUp extends AppCompatActivity {
         }
 
 
-        // Adjust this URL with your actual server username
         String url = "https://lamp.ms.wits.ac.za/home/s2698600/signup.php";
 
         RequestBody formBody = new FormBody.Builder()

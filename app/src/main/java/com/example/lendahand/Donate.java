@@ -227,6 +227,7 @@ public class Donate extends AppCompatActivity {
 
         int newRemaining = r.quantityNeeded - quantity;
 
+
         runOnUiThread(() -> {
             String currentQtyStr = qty.getText().toString().trim();
             int currentQty = 0;
@@ -247,14 +248,11 @@ public class Donate extends AppCompatActivity {
             checkDonationSum();
         });
 
-
         RequestBody formBody = new FormBody.Builder()
                 .add("donor_user_id", String.valueOf(donor_user_id))
                 .add("request_id", String.valueOf(request_id))
                 .add("quantity_donated", String.valueOf(quantity))
-                .add("new_quantity_needed", String.valueOf(newRemaining))
                 .build();
-
 
         Request request = new Request.Builder()
                 .url("https://lamp.ms.wits.ac.za/home/s2698600/send_donated_items.php")
@@ -262,22 +260,47 @@ public class Donate extends AppCompatActivity {
                 .build();
 
         client.newCall(request).enqueue(new okhttp3.Callback(){
-
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    runOnUiThread(() -> {
-                        r.quantityNeeded -= r.quantityToDonate;
-                        r.quantityToDonate = 0;
 
-                        Toast.makeText(Donate.this, "Donation sent!", Toast.LENGTH_SHORT).show();
-                        receiverAdapter.notifyDataSetChanged();
-                        checkDonationSum();
+                    RequestBody formBody1 = new FormBody.Builder()
+                            .add("donor_user_id", String.valueOf(donor_user_id))
+                            .add("request_id", String.valueOf(request_id))
+                            .add("quantity_donated", String.valueOf(quantity))
+                            .add("new_quantity", String.valueOf(newRemaining))
+                            .build();
+
+                    Request request2 = new Request.Builder()
+                            .url("https://lamp.ms.wits.ac.za/home/s2698600/update_request_items.php")
+                            .post(formBody1)
+                            .build();
+
+                    client.newCall(request2).enqueue(new okhttp3.Callback(){
+
+                        @Override
+                        public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                            if(response.isSuccessful()){
+                                runOnUiThread(() ->{
+                                    Toast.makeText(Donate.this, "Donation sent & record updated!", Toast.LENGTH_SHORT).show();
+                                    receiverAdapter.notifyDataSetChanged();
+                                    checkDonationSum();
+                                });
+                            }
+                            else{
+                                runOnUiThread(() -> Toast.makeText(Donate.this, "Request update failed", Toast.LENGTH_SHORT).show());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                            e.printStackTrace();
+                            runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to update request", Toast.LENGTH_SHORT).show());
+                        }
                     });
                 } else {
-                    runOnUiThread(() -> Toast.makeText(Donate.this, "Server error", Toast.LENGTH_SHORT).show());
+                    runOnUiThread(() -> Toast.makeText(Donate.this, "Failed to record donation", Toast.LENGTH_SHORT).show());
                 }
-
             }
 
             @Override

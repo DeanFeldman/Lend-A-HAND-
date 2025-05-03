@@ -45,19 +45,15 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-
         TextView textLogin = findViewById(R.id.here);
         textLogin.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SignUp.class);
             startActivity(intent);
         });
 
-
         buttonLogin = findViewById(R.id.button_login);
         emailInput = findViewById(R.id.input_email);
         passwordInput = findViewById(R.id.input_password);
-
-
 
         buttonLogin.setOnClickListener(view -> {
             processLogin();
@@ -72,27 +68,24 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-
                 String url = "https://lamp.ms.wits.ac.za/home/s2698600/login.php";
 
-                // Create request body
                 RequestBody formBody = new FormBody.Builder()
                         .add("user_email", email)
                         .add("user_password", password)
                         .build();
 
-                // Build the request
                 Request request = new Request.Builder()
                         .url(url)
                         .post(formBody)
                         .build();
 
-                // Send the request asynchronously
                 client.newCall(request).enqueue(new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
+                        e.printStackTrace();
                         runOnUiThread(() ->
-                                Toast.makeText(MainActivity.this, "Network Error: " + e.getMessage(), Toast.LENGTH_LONG).show()
+                                Toast.makeText(MainActivity.this,  e.getMessage(), Toast.LENGTH_LONG).show()
                         );
                     }
 

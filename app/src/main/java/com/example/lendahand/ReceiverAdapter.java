@@ -33,7 +33,7 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameText, neededText;
+        TextView nameText, neededText, userBio;
         EditText donationInput;
 
         public ViewHolder(View view) {
@@ -41,6 +41,7 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
             nameText = view.findViewById(R.id.text_receiver_name);
             neededText = view.findViewById(R.id.text_quantity_needed);
             donationInput = view.findViewById(R.id.input_donation);
+            userBio = view.findViewById(R.id.text_receiver_bio);
         }
     }
 
@@ -54,10 +55,11 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ReceiverAdapter.ViewHolder holder, int position) {
         Receiver receiver = receiverList.get(position);
+
+        holder.userBio.setText(receiver.biography);
         holder.nameText.setText(receiver.name);
         holder.neededText.setText("Needs: " + receiver.quantityNeeded);
 
-        // Input limit: 0 to quantityNeeded
         holder.donationInput.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(3)
         });
@@ -77,9 +79,8 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
                 int value = 0;
                 try {
                     value = Integer.parseInt(input);
-                } catch (NumberFormatException e) {
-                    // Leave value as 0
                 }
+                catch (NumberFormatException e) { }
 
                 if (value < 0) value = 0;
                 if (value > receiver.quantityNeeded) value = receiver.quantityNeeded;
@@ -87,7 +88,7 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
                 receiver.quantityToDonate = value;
 
                 if (!input.equals(String.valueOf(value))) {
-                    // enforce max cap
+
                     holder.donationInput.setText(String.valueOf(value));
                     holder.donationInput.setSelection(holder.donationInput.getText().length());
                 }
@@ -96,14 +97,6 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
             }
         });
 
-        // Dialog on click
-        holder.nameText.setOnClickListener(v -> {
-            new AlertDialog.Builder(context)
-                    .setTitle(receiver.name)
-                    .setMessage("Biography:\n" + receiver.biography + "\n\nItems Needed: " + receiver.quantityNeeded)
-                    .setPositiveButton("OK", null)
-                    .show();
-        });
     }
 
     @Override
