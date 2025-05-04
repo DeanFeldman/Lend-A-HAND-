@@ -10,11 +10,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,9 +31,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
-        private EditText editTextName;
-        private EditText editTextBio;
-        private TextView displayEmail;
+        private EditText editTextName,editTextBio;
+        private TextView displayEmail,donatedSummary,receivedSummary;
 
 
     @Override
@@ -48,9 +49,16 @@ public class Profile extends AppCompatActivity {
         editTextName = findViewById(R.id.input_name);
         editTextBio  = findViewById(R.id.input_bio);
         displayEmail = findViewById(R.id.display_email);
+        donatedSummary = findViewById(R.id.text_donated_summary);
+        receivedSummary = findViewById(R.id.text_received_summary);
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String email = prefs.getString("user_email", "");
+        int user_Id = prefs.getInt("user_id",-1);
+
+        if(user_Id != -1){
+            fetchUserStats(user_Id, donatedSummary, receivedSummary);
+        }
         displayEmail.setText(email);
 
         Button buttonDonorWall = findViewById(R.id.button_DonorWall);
@@ -213,6 +221,90 @@ public class Profile extends AppCompatActivity {
                 }
             }
 
+        });
+    }
+
+    private void fetchUserStats(int userId, TextView donatedSummary, TextView receivedSummary) {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("user_id", String.valueOf(userId))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/get_user_stats.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> {
+                    donatedSummary.setText("Failed to load donations.");
+                    receivedSummary.setText("Failed to load received items.");
+                });
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    runOnUiThread(() -> {
+                        donatedSummary.setText("Error loading donations.");
+                        receivedSummary.setText("Error loading received items.");
+                    });
+                    return;
+                }
+
+                String jsonData = response.body().string();
+
+                try{
+                    JSONObject json = new JSONObject(jsonData);
+                    Log.e("PROFILE_JSON", jsonData);
+
+                    JSONArray donatedArray = json.getJSONArray("donated");
+                    JSONArray receivedArray = json.getJSONArray("received");
+
+                    StringBuilder donatedText = new StringBuilder();
+                    StringBuilder receivedText = new StringBuilder();
+
+                    if (donatedArray.length() == 0) {
+                        donatedText.append("You have not donated any items.");
+                    }
+                    else{
+                        donatedText.append("You have donated:\n");
+                        for (int i = 0; i < donatedArray.length(); i++) {
+                            JSONObject item = donatedArray.getJSONObject(i);
+                            String name = item.getString("item_name");
+                            int qty = item.getInt("total_donated");
+                            donatedText.append("• ").append(name).append(": ").append(qty).append("\n");
+                        }
+                    }
+
+                    if(receivedArray.length() == 0){
+                        receivedText.append("You have not received any items.");
+                    }
+                    else{
+                        receivedText.append("You have received:\n");
+                        for (int i = 0; i < receivedArray.length(); i++) {
+                            JSONObject item = receivedArray.getJSONObject(i);
+                            String name = item.getString("item_name");
+                            int qty = item.getInt("total_received");
+                            receivedText.append("• ").append(name).append(": ").append(qty).append("\n");
+                        }
+                    }
+
+                    runOnUiThread(() -> {
+                        donatedSummary.setText(donatedText.toString().trim());
+                        receivedSummary.setText(receivedText.toString().trim());
+                    });
+                }
+                catch (JSONException e){
+                    runOnUiThread(() -> {
+                        donatedSummary.setText("Error parsing data.");
+                        receivedSummary.setText("Error parsing data.");
+                    });
+                }
+            }
         });
     }
 }

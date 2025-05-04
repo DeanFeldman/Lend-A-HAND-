@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 runOnUiThread(() -> {
                                     if (success) {
-                                        CUSTOMTOAST.showCustomToast(MainActivity.this, "Signup successful!");
+                                        CUSTOMTOAST.showCustomToast(MainActivity.this, "Login successful!");
 
                                         JSONObject userObject = null;
                                         try {
