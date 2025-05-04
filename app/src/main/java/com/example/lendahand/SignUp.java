@@ -4,10 +4,15 @@ package com.example.lendahand;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.text.TextUtils;
+
+import android.view.View;
+import java.util.Locale;
 import android.widget.Button;
-import android.widget.DatePicker;
+
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -31,8 +36,9 @@ import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
     Button buttonSignUp;
-    EditText txtFName , txtLName , txtEmail, txtPassword;
-    DatePicker dtpDOB;
+    EditText txtFName , txtLName , txtEmail, txtPassword,dtpDOB;
+
+    TextView passwordHint;
     OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -51,10 +57,42 @@ public class SignUp extends AppCompatActivity {
         txtEmail = findViewById(R.id.input_email);
         txtPassword = findViewById(R.id.input_password);
         buttonSignUp = findViewById(R.id.button_signup);
+        passwordHint = findViewById(R.id.password_hint);
         dtpDOB = findViewById(R.id.input_dob);
 
         buttonSignUp.setOnClickListener(view -> {
            processSignUp();
+        });
+
+        txtPassword.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && txtPassword.getText().toString().isEmpty()) {
+                passwordHint.setVisibility(View.VISIBLE);
+            } else {
+                passwordHint.setVisibility(View.GONE);
+            }
+        });
+
+        dtpDOB.setOnClickListener(v -> {
+            final Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    this,
+                    (view, year1, month1, dayOfMonth) -> {
+                        String date = dayOfMonth + "/" + (month1 + 1) + "/" + year1;
+                        dtpDOB.setText(date);
+                    },
+                    year, month, day
+            );
+
+
+            try {
+                datePickerDialog.getDatePicker().setCalendarViewShown(false);
+            } catch (Exception ignored) {}
+
+            datePickerDialog.show();
         });
 
     }
@@ -65,40 +103,48 @@ public class SignUp extends AppCompatActivity {
         String email = txtEmail.getText().toString().trim();
         String password = txtPassword.getText().toString().trim();
 
-        int day = dtpDOB.getDayOfMonth();
-        int month = dtpDOB.getMonth();
-        int year = dtpDOB.getYear();
+        String dob = dtpDOB.getText().toString().trim() ;
+        String[] parts = dob.split("/");
 
-        String dob = String.format("%04d-%02d-%02d", year, month + 1, day);
+        int day = Integer.parseInt(parts[0]);
+        int month = Integer.parseInt(parts[1]) - 1;
+        int year = Integer.parseInt(parts[2]);
+
+        String formattedDob = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
 
         //check age is > 18 years old
-        Calendar calendarDOB = Calendar.getInstance();
-        calendarDOB.set(year, month, day);
-        Calendar calendarToday = Calendar.getInstance();
-        int age = calendarToday.get(Calendar.YEAR) - calendarDOB.get(Calendar.YEAR);
+        Calendar today = Calendar.getInstance();
+        Calendar dobCalendar = Calendar.getInstance();
+        dobCalendar.set(year, month, day);
 
-        //adjusts if the person hasnt had their birthday yet
-        if (calendarToday.get(Calendar.DAY_OF_YEAR) < calendarDOB.get(Calendar.DAY_OF_YEAR)) {
+        //check if bday in future
+        if (dobCalendar.after(today)) {
+            CUSTOMTOAST.showCustomToast(this, "Date of Birth cannot be in the future");
+            return;
+        }
+        //check if bday has occured this yr alr
+        Calendar birthdayThisYear = (Calendar) dobCalendar.clone();
+        birthdayThisYear.set(Calendar.YEAR, today.get(Calendar.YEAR));
+
+        int age = today.get(Calendar.YEAR) - dobCalendar.get(Calendar.YEAR);
+        if (today.before(birthdayThisYear)) {
             age--;
         }
-        if(age < 18){
-            CUSTOMTOAST.showCustomToast(this, "You must be atleast 18 years old");
-            return;
-        }
-        if(calendarDOB.after(calendarToday)){
-            CUSTOMTOAST.showCustomToast(this, "Date of Birth Cannot be in the future");
+
+        if (age < 18) {
+            CUSTOMTOAST.showCustomToast(this, "You must be at least 18 years old");
             return;
         }
 
-        //checks empty
+        //checks if fields are empty
         if (TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
             Toast.makeText(SignUp.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        //password >6 chars
-        if (password.length() < 6) {
-            CUSTOMTOAST.showCustomToast(SignUp.this, "Password must be at least 6 characters long.");
+        //password >=8 chars
+        if (password.length() <= 8) {
+            CUSTOMTOAST.showCustomToast(SignUp.this, "Password must be at least 8 characters long.");
             return;
         }
         //checks the password contains uppercase, lowercase and special character
@@ -128,7 +174,7 @@ public class SignUp extends AppCompatActivity {
         RequestBody formBody = new FormBody.Builder()
                 .add("user_fname", fname)
                 .add("user_lname", lname)
-                .add("user_dob", dob)
+                .add("user_dob", formattedDob)
                 .add("user_email", email)
                 .add("user_password", password)
                 .add("user_biography", "")
@@ -169,7 +215,10 @@ public class SignUp extends AppCompatActivity {
                         });
 
                     } catch (Exception e) {
+
+
                         runOnUiThread(() ->
+
                                 CUSTOMTOAST.showCustomToast(SignUp.this, "Parsing Error: " + e.getMessage())
                         );
                     }

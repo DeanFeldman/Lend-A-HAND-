@@ -35,6 +35,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Name"
+            android:textColorHint="#2b2c2e"
+            android:textColor="#2b2c2e"
             android:inputType="textPersonName"
             android:backgroundTint="#616161"
             android:padding="14dp"
@@ -45,36 +47,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Surname"
+            android:textColorHint="#2b2c2e"
+            android:textColor="#2b2c2e"
             android:inputType="textPersonName"
             android:backgroundTint="#616161"
             android:padding="14dp"
             android:layout_marginBottom="16dp" />
 
-        <TextView
-            android:id="@+id/DOBtitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Date of Birth"
-            android:textColor="#424242"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp" />
-
-        <DatePicker
+        <EditText
             android:id="@+id/input_dob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:backgroundTint="#616161"
-            android:clickable="true"
+            android:hint="Select Date of Birth (DD/MM/YYYY)"
             android:focusable="false"
-            android:hint="YYYY-MM-DD"
-            android:padding="14dp" />
+            android:clickable="true"
+            android:backgroundTint="#616161"
+            android:padding="14dp"
+            android:layout_marginBottom="16dp"
+            android:textColorHint="#2b2c2e"
+            android:textColor="#2b2c2e"/>
+
 
         <EditText
             android:id="@+id/input_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
+            android:textColorHint="#2b2c2e"
+            android:textColor="#2b2c2e"
             android:inputType="textEmailAddress"
             android:backgroundTint="#616161"
             android:padding="14dp"
@@ -85,16 +85,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password"
+            android:textColorHint="#2b2c2e"
+            android:textColor="#2b2c2e"
             android:inputType="textPassword"
             android:backgroundTint="#616161"
             android:padding="14dp"
             android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/password_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password must be at least: 8 characters, include a number and a special character."
+            android:textColor="#757575"
+            android:textSize="14sp"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp" />
 
         <EditText
             android:id="@+id/input_confirm_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Confirm Password"
+            android:textColorHint="#2b2c2e"
+            android:textColor="#2b2c2e"
             android:inputType="textPassword"
             android:backgroundTint="#616161"
             android:padding="14dp"
@@ -114,6 +128,6 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="128dp" />
+            android:layout_height="252dp" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

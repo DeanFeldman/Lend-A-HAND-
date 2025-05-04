@@ -51,6 +51,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#616161"
+                android:textColorHint="#2b2c2e"
+                android:textColor="#2b2c2e"
                 android:layout_marginBottom="24dp" />
 
             <TextView
@@ -67,7 +69,9 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter quantity needed"
                 android:inputType="number"
+                android:textColorHint="#2b2c2e"
                 android:backgroundTint="#616161"
+                android:textColor="#2b2c2e"
                 android:padding="12dp"
                 android:layout_marginBottom="32dp" />
 
