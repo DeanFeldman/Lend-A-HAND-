@@ -1,12 +1,19 @@
 <?php
 include 'db_connect.php';
 
-$user_fname = $_REQUEST['user_fname'];
-$user_lname = $_REQUEST['user_lname'];
-$user_dob = $_REQUEST['user_dob'];
-$user_email = $_REQUEST['user_email'];
-$user_password = password_hash($_REQUEST['user_password'], PASSWORD_DEFAULT);
-$user_biography = $_REQUEST['user_biography'];
+$user_fname = $_REQUEST['user_fname'] ?? null;
+$user_lname = $_REQUEST['user_lname'] ?? null;
+$user_dob = $_REQUEST['user_dob'] ?? null;
+$user_email = $_REQUEST['user_email'] ?? null;
+$user_password = isset($_REQUEST['user_password']) ? password_hash($_REQUEST['user_password'], PASSWORD_DEFAULT) : null;$user_biography = $_REQUEST['user_biography'] ?? null;
+
+if (!$user_fname || !$user_lname || !$user_dob || !$user_email || !$user_password) {
+    echo json_encode([
+        "success" => false,
+        "message" => "Missing required fields"
+    ]);
+    exit;
+}
 
 $response = array();
 
