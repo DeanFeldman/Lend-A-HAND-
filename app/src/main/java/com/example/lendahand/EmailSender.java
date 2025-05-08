@@ -6,9 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class EmailSender {
-    //lendahandconfirmation@gmail.com
-    //Email@Contact1
-    //app password: attm tzsu usem htej
 
 
     private String username = "lendahandconfirmation@gmail.com";

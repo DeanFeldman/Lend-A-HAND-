@@ -148,6 +148,20 @@ public class Recieve extends AppCompatActivity {
                     CUSTOMTOAST.showCustomToast(Recieve.this, "Request submitted successfully!");
                     quantityInput.setText("");
                 });
+                    SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                    String userEmail = prefs.getString("user_email", "you@example.com");
+                    String userName = prefs.getString("user_fname", "User");
+                    String itemName = spinnerItems.getSelectedItem().toString();
+
+                    String subject = "Your Request Has Been Received!";
+                    String body = "Hi " + userName + ",\n\nYou successfully submitted a request for " +
+                            quantityStr + " " + itemName + ".\nWe'll notify you when a donation is made.\n\nThank you!";
+
+                    new Thread(() -> {
+                        EmailSender sender = new EmailSender();
+                        sender.sendEmail(userEmail, subject, body);
+                    }).start();
+
             }
         });
     }

@@ -170,14 +170,12 @@ public class Donate extends AppCompatActivity {
                             int userId = obj.getInt("user_id");
                             String name = obj.getString("user_fname") + " " + obj.getString("user_lname");
                             String bio = obj.getString("user_biography");
-                            String email = obj.getString("user_email");
                             int needed = obj.getInt("quantity_needed");
                             SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                             int user_id = prefs.getInt("user_id", -1);
                             if(user_id!=userId) {
-                                receiverList.add(new Receiver(requestId, userId, name,email, bio, needed));
+                                receiverList.add(new Receiver(requestId, userId, name, bio, needed));
                             }
-
                         }
 
                         runOnUiThread(() -> receiverAdapter.notifyDataSetChanged());
@@ -230,6 +228,7 @@ public class Donate extends AppCompatActivity {
 
         int newRemaining = r.quantityNeeded - quantity;
 
+
         runOnUiThread(() -> {
             String currentQtyStr = qty.getText().toString().trim();
             int currentQty = 0;
@@ -245,6 +244,7 @@ public class Donate extends AppCompatActivity {
             r.quantityNeeded = newRemaining;
             r.quantityToDonate = 0;
 
+            CUSTOMTOAST.showCustomToast(Donate.this, "Donation sent!");
             receiverAdapter.notifyDataSetChanged();
             checkDonationSum();
         });
@@ -311,6 +311,7 @@ public class Donate extends AppCompatActivity {
                                                 " from " + donorName + " (" + donorEmail + ").\nPlease check your account for updates.";
                                         sender.sendEmail(receiverEmail, receiverSubject, receiverBody);
                                     }).start();
+
                                 });
                             }
                             else{

@@ -10,11 +10,10 @@ public class Receiver {
     public int quantityNeeded;
     public int quantityToDonate = 0;
 
-    public Receiver(int requestId, int userId, String name, String email, String biography, int quantityNeeded) {
+    public Receiver(int requestId, int userId, String name, String biography, int quantityNeeded) {
         this.requestId = requestId;
         this.userId = userId;
         this.name = name;
-        this.email = email;
         this.biography = biography;
         this.quantityNeeded = quantityNeeded;
     }
