@@ -5,14 +5,16 @@ public class Receiver {
     public int userId;
     public int requestId;
     public String name;
+    public String email;
     public String biography;
     public int quantityNeeded;
     public int quantityToDonate = 0;
 
-    public Receiver(int requestId, int userId, String name, String biography, int quantityNeeded) {
+    public Receiver(int requestId, int userId, String name, String email, String biography, int quantityNeeded) {
         this.requestId = requestId;
         this.userId = userId;
         this.name = name;
+        this.email = email;
         this.biography = biography;
         this.quantityNeeded = quantityNeeded;
     }
@@ -21,4 +23,11 @@ public class Receiver {
         return requestId;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

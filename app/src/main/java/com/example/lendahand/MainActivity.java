@@ -114,17 +114,19 @@ public class MainActivity extends AppCompatActivity {
                                             userObject = json.getJSONObject("user");
                                             int userId = userObject.getInt("user_id");
 
+                                            String userFname = userObject.getString("user_fname");
 
-                                        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                                        SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putString("user_email", email);
-                                        editor.putInt("user_id", userId);
-                                        editor.apply();
+                                            SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                                            SharedPreferences.Editor editor = prefs.edit();
+                                            editor.putString("user_email", email);
+                                            editor.putString("user_fname", userFname);
+                                            editor.putInt("user_id", userId);
+                                            editor.apply();
 
 
-                                        Intent intent = new Intent(MainActivity.this, Donorwall.class);
-                                        startActivity(intent);
-                                        finish();
+                                            Intent intent = new Intent(MainActivity.this, Donorwall.class);
+                                            startActivity(intent);
+                                            finish();
                                         } catch (JSONException e) {
                                             throw new RuntimeException(e);
                                         }

@@ -1,6 +1,7 @@
 package com.example.lendahand;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -53,6 +54,11 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     public void resetPassword() {
+
+        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String fname = prefs.getString("user_fname", "there");
+
+
         String email = emailInput.getText().toString().trim();
         String newPassword = newPasswordInput.getText().toString().trim();
 
@@ -60,6 +66,32 @@ public class ForgotPassword extends AppCompatActivity {
             CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Please enter your email and new password");
             return;
         }
+
+        //validate new password
+        if (newPassword.length() < 8) {
+            CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Password must be at least 8 characters long.");
+            return;
+        }
+
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasSpecial = false;
+
+        for (char c : newPassword.toCharArray()) {
+            if (Character.isUpperCase(c)) {
+                hasUpper = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLower = true;
+            } else if (!Character.isLetterOrDigit(c)) {
+                hasSpecial = true;
+            }
+        }
+
+        if (!hasUpper || !hasLower || !hasSpecial) {
+            CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Password must contain uppercase, lowercase, and special character.");
+            return;
+        }
+
         RequestBody formbody = new FormBody.Builder()
                 .add("user_email",email)
                 .add("new_password", newPassword)
@@ -88,6 +120,15 @@ public class ForgotPassword extends AppCompatActivity {
 
                         CUSTOMTOAST.showCustomToast(ForgotPassword.this, message);
                         if(success){
+                            CUSTOMTOAST.showCustomToast(ForgotPassword.this, "Password reset successful!");
+
+                            //send email confirmation
+                            new Thread(() -> {
+                                EmailSender sender = new EmailSender();
+                                sender.sendEmail(email, "Password Reset Confirmation", "Hi " + fname + ",\n\nYour password was successfully reset. If this wasn't you, please reply to this email.");
+                            }).start();
+
+
                             Intent intent = new Intent(ForgotPassword.this, MainActivity.class);
                             startActivity(intent);
                             finish();

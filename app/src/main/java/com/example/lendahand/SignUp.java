@@ -205,6 +205,15 @@ public class SignUp extends AppCompatActivity {
                             if (success) {
                                 CUSTOMTOAST.showCustomToast(SignUp.this, "Signup successful! Please login.");
 
+                                //send email confirmation
+                                new Thread(() -> {
+                                    EmailSender sender = new EmailSender();
+                                    sender.sendEmail(email, "Welcome to LendAHand!", "Hi " + fname + ",\n\nThanks for signing up for LendAHand!");
+                                }).start();
+
+                                runOnUiThread(() -> CUSTOMTOAST.showCustomToast(SignUp.this, "Email Confirmation sent!"));
+
+                                //swap pages
                                 Intent intent = new Intent(SignUp.this, MainActivity.class);
                                 startActivity(intent);
                                 finish();
