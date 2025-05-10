@@ -23,8 +23,8 @@
             android:orientation="vertical"
             android:background="@android:color/white"
             android:padding="24dp"
-            android:elevation="6dp"
             android:layout_margin="16dp"
+            android:elevation="6dp"
             android:clipToPadding="false">
 
             <TextView
@@ -79,8 +79,7 @@
             android:backgroundTint="#002366"
             android:textColor="#FFFFFF"
             android:padding="12dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginHorizontal="8dp"
             android:elevation="2dp" />
 
         <Button

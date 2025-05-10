@@ -64,13 +64,6 @@ public class SignUp extends AppCompatActivity {
            processSignUp();
         });
 
-        txtPassword.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus && txtPassword.getText().toString().isEmpty()) {
-                passwordHint.setVisibility(View.VISIBLE);
-            } else {
-                passwordHint.setVisibility(View.GONE);
-            }
-        });
 
         dtpDOB.setOnClickListener(v -> {
             final Calendar calendar = Calendar.getInstance();

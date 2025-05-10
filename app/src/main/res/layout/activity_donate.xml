@@ -1,67 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
+    android:id="@+id/donate_scrollview"
     android:background="@drawable/gradient_background"
     tools:context=".Donate">
 
-    <ScrollView
-        android:id="@+id/donate_scrollview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="24dp">
 
         <LinearLayout
-            android:id="@+id/donateContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@android:color/white"
-            android:elevation="6dp"
-            android:padding="32dp"
-            android:layout_margin="8dp"
-            android:clipToPadding="false">
+            android:gravity="center_horizontal"
+            android:paddingVertical="32dp">
 
             <TextView
                 android:id="@+id/donate_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="32dp"
                 android:text="Donate Items"
-                android:textSize="26sp"
+                android:textSize="28sp"
+                android:textStyle="bold"
                 android:textColor="#1A237E"
-                android:textStyle="bold" />
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Help those in need"
+                android:textSize="16sp"
+                android:textColor="#607D8B"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:background="#FFFFFF"
+            android:elevation="6dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#FFFFFF"
+            android:clipToPadding="false">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select Item"
-                android:textSize="16sp"
                 android:textColor="#555555"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
 
             <Spinner
                 android:id="@+id/spinner_items"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#616161"
+                android:padding="14dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/editbox_background"
                 android:textColor="#2b2c2e"
-                android:textColorHint="#2b2c2e"
-                android:layout_marginBottom="24dp" />
+                android:textColorHint="#888888"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Select Quantity to Donate"
-                android:textSize="16sp"
                 android:textColor="#555555"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
 
             <EditText
                 android:id="@+id/input_quantity"
@@ -69,19 +84,19 @@
                 android:layout_height="wrap_content"
                 android:hint="Enter quantity"
                 android:inputType="number"
-                android:textColorHint="#2b2c2e"
                 android:textColor="#2b2c2e"
-                android:backgroundTint="#616161"
-                android:padding="12dp"
-                android:layout_marginBottom="24dp" />
+                android:textColorHint="#888888"
+                android:padding="14dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:drawable/editbox_background"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Receivers Needing This Item"
-                android:textSize="16sp"
                 android:textColor="#555555"
-                android:layout_marginBottom="8dp" />
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/receiver_recycler"
@@ -89,68 +104,67 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 android:background="#EEEEEE"
-                tools:listitem="@layout/item_receiver_row" />
+                tools:listitem="@layout/item_receiver_row"/>
 
             <Button
                 android:id="@+id/button_donate_to_receiver"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Donate to Selected Receiver"
-                android:textAllCaps="false"
                 android:textColor="#FFFFFF"
-                android:textSize="16sp"
                 android:backgroundTint="#2979FF"
                 android:padding="14dp"
-                android:elevation="2dp" />
+                android:layout_marginBottom="16dp"
+                android:elevation="3dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DDDDDD"
+                android:layout_marginBottom="24dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/button_DonorWall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Donor Wall"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#002366"
+                    android:padding="12dp"
+                    android:layout_marginEnd="4dp"
+                    android:elevation="3dp"/>
+
+                <Button
+                    android:id="@+id/Button_Profile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Profile"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#002366"
+                    android:padding="12dp"
+                    android:layout_marginHorizontal="4dp"
+                    android:elevation="3dp"/>
+
+                <Button
+                    android:id="@+id/button_Recieve"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Request"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="#002366"
+                    android:padding="12dp"
+                    android:layout_marginStart="4dp"
+                    android:elevation="3dp"/>
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/bottom_button_bar_donate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@android:color/white"
-        android:elevation="8dp"
-        android:padding="8dp"
-        android:weightSum="3"
-        android:gravity="center">
-
-        <Button
-            android:id="@+id/button_DonorWall"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Donor Wall"
-            android:textAllCaps="false"
-            android:backgroundTint="#002366"
-            android:textColor="#FFFFFF"
-            android:padding="12dp"
-            android:elevation="2dp" />
-
-        <Button
-            android:id="@+id/Button_Profile"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Profile"
-            android:textAllCaps="false"
-            android:backgroundTint="#002366"
-            android:textColor="#FFFFFF"
-            android:layout_marginHorizontal="8dp"
-            android:padding="12dp"
-            android:elevation="2dp" />
-
-        <Button
-            android:id="@+id/button_Recieve"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Request"
-            android:textAllCaps="false"
-            android:backgroundTint="#002366"
-            android:textColor="#FFFFFF"
-            android:padding="12dp"
-            android:elevation="2dp" />
     </LinearLayout>
-</LinearLayout>
+</ScrollView>
