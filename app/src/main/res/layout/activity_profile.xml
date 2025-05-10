@@ -170,6 +170,27 @@
                     android:text="You have received 0 items."
                     android:textColor="#444444"
                     android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/text_donor_contacts_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Donors Who Helped You"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#1A237E"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/text_donor_contacts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loading donor contact list..."
+                    android:textColor="#444444"
+                    android:textSize="14sp" />
+
             </LinearLayout>
         </LinearLayout>
         </ScrollView>

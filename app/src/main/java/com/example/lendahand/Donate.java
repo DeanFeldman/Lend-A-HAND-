@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -287,6 +288,7 @@ public class Donate extends AppCompatActivity {
                                     receiverAdapter.notifyDataSetChanged();
                                     checkDonationSum();
 
+                                    //send emails
                                     new Thread(() -> {
                                         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                                         String donorEmail = prefs.getString("user_email", "donor@example.com");
@@ -310,6 +312,17 @@ public class Donate extends AppCompatActivity {
                                         String receiverBody = "Hi " + receiverName + ",\n\nYou have received " + quantity + " " + itemName +
                                                 " from " + donorName + " (" + donorEmail + ").\nPlease check your account for updates.";
                                         sender.sendEmail(receiverEmail, receiverSubject, receiverBody);
+
+                                        // show a pop up
+                                        runOnUiThread(() -> {
+                                            // 2. Alert Dialog
+                                            new AlertDialog.Builder(Donate.this)
+                                                    .setTitle("Emails Sent")
+                                                    .setMessage("Confirmation email sent to:\n" + donorEmail +
+                                                            "\n Notification email sent to:\n" + receiverEmail)
+                                                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                                    .show();
+                                        });
                                     }).start();
 
                                 });

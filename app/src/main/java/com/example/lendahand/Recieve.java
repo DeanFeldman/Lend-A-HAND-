@@ -153,6 +153,7 @@ public class Recieve extends AppCompatActivity {
                     String userName = prefs.getString("user_fname", "User");
                     String itemName = spinnerItems.getSelectedItem().toString();
 
+                    //send email
                     String subject = "Your Request Has Been Received!";
                     String body = "Hi " + userName + ",\n\nYou successfully submitted a request for " +
                             quantityStr + " " + itemName + ".\nWe'll notify you when a donation is made.\n\nThank you!";

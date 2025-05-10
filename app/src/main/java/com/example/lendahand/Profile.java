@@ -32,7 +32,7 @@ import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
         private EditText editTextName,editTextBio;
-        private TextView displayEmail,donatedSummary,receivedSummary;
+        private TextView displayEmail,donatedSummary,receivedSummary,donorContacts;
 
 
     @Override
@@ -51,6 +51,7 @@ public class Profile extends AppCompatActivity {
         displayEmail = findViewById(R.id.display_email);
         donatedSummary = findViewById(R.id.text_donated_summary);
         receivedSummary = findViewById(R.id.text_received_summary);
+        donorContacts = findViewById(R.id.text_donor_contacts);
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String email = prefs.getString("user_email", "");
@@ -119,6 +120,8 @@ public class Profile extends AppCompatActivity {
             finish();
         });
 
+
+        fetchDonorContacts(user_Id, donorContacts);
         fetchUserFromDatabase();
     }
 
@@ -307,4 +310,60 @@ public class Profile extends AppCompatActivity {
             }
         });
     }
+
+    private void fetchDonorContacts(int userId, TextView donorContactsView) {
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("user_id", String.valueOf(userId))
+                .build();
+
+        Request request = new Request.Builder()
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/get_donors.php")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                runOnUiThread(() -> donorContactsView.setText("Failed to load donors."));
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    runOnUiThread(() -> donorContactsView.setText("Error loading donors."));
+                    return;
+                }
+
+                try {
+                    String jsonData = response.body().string();
+                    JSONObject obj = new JSONObject(jsonData);
+
+                    if (obj.getBoolean("success")) {
+                        JSONArray donors = obj.getJSONArray("donors");
+                        StringBuilder builder = new StringBuilder();
+
+                        if (donors.length() == 0) {
+                            builder.append("No one has donated to you yet.");
+                        } else {
+                            for (int i = 0; i < donors.length(); i++) {
+                                JSONObject donor = donors.getJSONObject(i);
+                                builder.append("• ").append(donor.getString("name"))
+                                        .append(": ").append(donor.getString("email")).append("\n");
+                            }
+                        }
+
+                        runOnUiThread(() -> donorContactsView.setText(builder.toString().trim()));
+                    } else {
+                        runOnUiThread(() -> donorContactsView.setText("No donor data available."));
+                    }
+                } catch (JSONException e) {
+                    runOnUiThread(() -> donorContactsView.setText("Error parsing donor data."));
+                }
+            }
+        });
+    }
+
+
 }

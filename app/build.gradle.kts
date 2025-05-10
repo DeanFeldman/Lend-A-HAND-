@@ -33,6 +33,7 @@ android {
         viewBinding = true
     }
 
+
     packagingOptions {
         resources {
             excludes.add("META-INF/NOTICE.md")
