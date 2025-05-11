@@ -109,53 +109,36 @@ public class Donorwall extends AppCompatActivity {
     }
 
     private void addDonorRow(int position, String name, double amount) {
+        View card = getLayoutInflater().inflate(R.layout.item_donor_card, leaderboard, false);
 
-        LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setPadding(16, 16, 16, 16);
+        TextView rankView = card.findViewById(R.id.text_rank);
+        TextView nameView = card.findViewById(R.id.text_name);
+        TextView amountView = card.findViewById(R.id.text_amount);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-
-        TextView positionView = new TextView(this);
-        positionView.setText(position + ". ");
-        positionView.setTextSize(16);
-        positionView.setLayoutParams(params);
-
-        TextView nameView = new TextView(this);
+        rankView.setText(position + ".");
         nameView.setText(name);
-        nameView.setTextSize(18);
-        nameView.setTypeface(null, android.graphics.Typeface.BOLD);
-        nameView.setLayoutParams(params);
+        amountView.setText((int) amount + " items");
 
-        TextView amountView = new TextView(this);
-        amountView.setText(String.valueOf((int) amount));
-        amountView.setTextSize(16);
-        amountView.setLayoutParams(params);
-        amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
+        switch (position) {
+            case 1:
+                rankView.setText("🥇 " + position + ".");
+                nameView.setTextColor(0xFFFFD700);
+                break;
+            case 2:
+                rankView.setText("🥈 " + position + ".");
+                nameView.setTextColor(0xFFC0C0C0);
+                break;
+            case 3:
+                rankView.setText("🥉 " + position + ".");
+                nameView.setTextColor(0xFFCD7F32);
+                break;
+            default:
+                break;
+        }
 
-        row.addView(positionView);
-        row.addView(nameView);
-        row.addView(amountView);
-
-
-        View divider = new View(this);
-        divider.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                2
-        ));
-        divider.setBackgroundColor(0xFFCCCCCC);
-
-        positionView.setTextColor(0xFF222222);
-        nameView.setTextColor(0xFF222222);
-        amountView.setTextColor(0xFF222222);
-
-        leaderboard.addView(row);
-        leaderboard.addView(divider);
+        leaderboard.addView(card);
     }
+
     private void addDonorRowHeader() {
         LinearLayout row = new LinearLayout(this);
         row.setOrientation(LinearLayout.HORIZONTAL);
