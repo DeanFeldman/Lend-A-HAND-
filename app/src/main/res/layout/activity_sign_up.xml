@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:text="Log in"
                     android:textSize="14sp"
-                    android:textColor="#00C853"
+                    android:textColor="#1E88E5"
                     android:textStyle="bold"
                     android:clickable="true"
                     android:focusable="true"

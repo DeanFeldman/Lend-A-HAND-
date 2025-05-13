@@ -43,6 +43,12 @@ public class Recieve extends AppCompatActivity {
             return insets;
         });
 
+        Button buttonBack = findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(view -> {
+            Intent intent = new Intent(Recieve.this, Donorwall.class);
+            startActivity(intent);
+        });
+
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", -1);
@@ -74,23 +80,12 @@ public class Recieve extends AppCompatActivity {
             submitRequest();
         });
 
-        Button buttonDonorWall = findViewById(R.id.button_donorwall);
-        buttonDonorWall.setOnClickListener(view -> {
+        Button buttonback = findViewById(R.id.button_back);
+        buttonback.setOnClickListener(view -> {
             Intent intent = new Intent(Recieve.this, Donorwall.class);
             startActivity(intent);
         });
 
-        Button buttonProfile = findViewById(R.id.button_profile);
-        buttonProfile.setOnClickListener(view -> {
-            Intent intent = new Intent(Recieve.this, Profile.class);
-            startActivity(intent);
-        });
-
-        Button buttonDonate = findViewById(R.id.button_donate);
-        buttonDonate.setOnClickListener(view -> {
-            Intent intent = new Intent(Recieve.this, Donate.class);
-            startActivity(intent);
-        });
 
         spinnerItems = findViewById(R.id.spinner_needed_items);
         adapter = new ArrayAdapter<>(

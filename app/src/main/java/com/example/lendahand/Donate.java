@@ -87,21 +87,9 @@ public class Donate extends AppCompatActivity {
             }
         });
 
-        Button buttonDonorWall = findViewById(R.id.button_DonorWall);
-        buttonDonorWall.setOnClickListener(view -> {
+        Button buttonBack = findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(view -> {
             Intent intent = new Intent(Donate.this, Donorwall.class);
-            startActivity(intent);
-        });
-
-        Button buttonProfile = findViewById(R.id.Button_Profile);
-        buttonProfile.setOnClickListener(view -> {
-            Intent intent = new Intent(Donate.this, Profile.class);
-            startActivity(intent);
-        });
-
-        Button buttonRecieve = findViewById(R.id.button_Recieve);
-        buttonRecieve.setOnClickListener(view -> {
-            Intent intent = new Intent(Donate.this, Recieve.class);
             startActivity(intent);
         });
 

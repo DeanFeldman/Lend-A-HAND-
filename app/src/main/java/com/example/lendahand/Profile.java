@@ -62,23 +62,13 @@ public class Profile extends AppCompatActivity {
         }
         displayEmail.setText(email);
 
-        Button buttonDonorWall = findViewById(R.id.button_DonorWall);
-        buttonDonorWall.setOnClickListener(view -> {
+
+        Button buttonBack = findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(view -> {
             Intent intent = new Intent(Profile.this, Donorwall.class);
             startActivity(intent);
         });
 
-        Button buttonDonate = findViewById(R.id.button_Donate);
-        buttonDonate.setOnClickListener(view -> {
-            Intent intent = new Intent(Profile.this, Donate.class);
-            startActivity(intent);
-        });
-
-        Button buttonRecieve = findViewById(R.id.button_Recieve);
-        buttonRecieve.setOnClickListener(view -> {
-            Intent intent = new Intent(Profile.this, Recieve.class);
-            startActivity(intent);
-        });
 
         CUSTOMTOAST.showCustomToast(this, "Click on the fields you want to change.");
 

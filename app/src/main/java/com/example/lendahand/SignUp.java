@@ -35,10 +35,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
-    Button buttonSignUp;
+    Button buttonSignUp ;
     EditText txtFName , txtLName , txtEmail, txtPassword,dtpDOB;
 
-    TextView passwordHint;
+    TextView passwordHint,txtLogin;
     OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -62,6 +62,13 @@ public class SignUp extends AppCompatActivity {
 
         buttonSignUp.setOnClickListener(view -> {
            processSignUp();
+        });
+
+        txtLogin = findViewById(R.id.text_login);
+        txtLogin.setOnClickListener(view -> {
+            Intent intent = new Intent(SignUp.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
 
 
@@ -95,13 +102,23 @@ public class SignUp extends AppCompatActivity {
         String lname = txtLName.getText().toString().trim();
         String email = txtEmail.getText().toString().trim();
         String password = txtPassword.getText().toString().trim();
+        String dob = dtpDOB.getText().toString().trim();
 
-        String dob = dtpDOB.getText().toString().trim() ;
+        //checks if fields are empty
+        if (TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
+            Toast.makeText(SignUp.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String[] parts = dob.split("/");
 
         int day = Integer.parseInt(parts[0]);
         int month = Integer.parseInt(parts[1]) - 1;
         int year = Integer.parseInt(parts[2]);
+
+        if (TextUtils.isEmpty(dob)) {
+            CUSTOMTOAST.showCustomToast(this, "Please select your Date of Birth");
+            return;
+        }
 
         String formattedDob = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
 
@@ -129,11 +146,6 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
-        //checks if fields are empty
-        if (TextUtils.isEmpty(fname) || TextUtils.isEmpty(lname) || TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) {
-            Toast.makeText(SignUp.this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         //password >=8 chars
         if (password.length() <= 8) {
