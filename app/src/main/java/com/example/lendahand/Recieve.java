@@ -43,12 +43,6 @@ public class Recieve extends AppCompatActivity {
             return insets;
         });
 
-        Button buttonBack = findViewById(R.id.button_back);
-        buttonBack.setOnClickListener(view -> {
-            Intent intent = new Intent(Recieve.this, Donorwall.class);
-            startActivity(intent);
-        });
-
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", -1);
@@ -86,25 +80,6 @@ public class Recieve extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-        spinnerItems = findViewById(R.id.spinner_needed_items);
-        adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                new ArrayList<String>());
-
-        spinnerItems.setAdapter(adapter);
-
-        new Thread(() -> {
-            ItemList list = new ItemList();
-            list.FetchItems(Recieve.this);
-
-            runOnUiThread(() -> {
-                adapter.clear();
-                adapter.addAll(ItemList.getItems());
-                adapter.notifyDataSetChanged();
-            });
-        }).start();
     }
     private void submitRequest() {
         String itemName = spinnerItems.getSelectedItem().toString();
