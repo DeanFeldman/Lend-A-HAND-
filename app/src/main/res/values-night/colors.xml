@@ -8,22 +8,20 @@
     <color name="colorPrimaryVariant">#2979FF</color>
     <color name="colorSecondary">#1E88E5</color>
 
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorSurface">#FFFFFF</color>
-    <color name="colorOnPrimary">#FFFFFF</color>
-    <color name="colorOnBackground">#000000</color>
-    <color name="colorOnSurface">#000000</color>
+    <color name="colorBackground">#121212</color>
+    <color name="colorSurface">#121212</color>
+    <color name="colorOnPrimary">#000000</color>
+    <color name="colorOnBackground">#FFFFFF</color>
+    <color name="colorOnSurface">#FFFFFF</color>
 
-    <color name="donorCardBackground">#FFFFFF</color>
-    <color name="donorTitleText">#1A237E</color>
-    <color name="bottomBarBackground">#FFFFFF</color>
+    <color name="donorCardBackground">#1E1E1E</color>
+    <color name="donorTitleText">#FFFFFF</color>
+    <color name="bottomBarBackground">#1C1C1C</color>
     <color name="navButtonBlue">#002366</color>
     <color name="navButtonText">#FFFFFF</color>
 
+
     <color name="dangerRed">#D32F2F</color>
     <color name="neutralGray">#757575</color>
-
-
-
 
 </resources>

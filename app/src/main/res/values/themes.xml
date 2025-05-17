@@ -1,12 +1,16 @@
+<!-- res/values/themes.xml -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.LendAHAND" parent="Theme.Material3.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <!-- <item name="android:windowBackground">?attr/colorSurface</item> -->
+    <!-- Base application theme that supports DayNight -->
+    <style name="Base.Theme.LendAHAND" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:fitsSystemWindows">false</item>
 
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:windowBackground">@color/colorBackground</item>
     </style>
-
 
     <style name="Theme.LendAHAND" parent="Base.Theme.LendAHAND" />
 </resources>

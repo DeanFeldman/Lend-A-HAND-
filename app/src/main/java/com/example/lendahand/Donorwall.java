@@ -90,7 +90,6 @@ public class Donorwall extends AppCompatActivity {
 
     private void populateLeaderboardFromJSON(String jsonData) {
         try {
-            addDonorRowHeader();
             JSONObject jsonObject = new JSONObject(jsonData);
             JSONArray jsonArray = jsonObject.getJSONArray("leaderboard");
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -139,53 +138,5 @@ public class Donorwall extends AppCompatActivity {
         leaderboard.addView(card);
     }
 
-    private void addDonorRowHeader() {
-        LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setPadding(16, 16, 16, 16);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                0,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-
-        TextView positionView = new TextView(this);
-        positionView.setText("Position");
-        positionView.setTextSize(16);
-        positionView.setLayoutParams(params);
-
-        TextView nameView = new TextView(this);
-        nameView.setText("Name");
-        nameView.setTextSize(18);
-        nameView.setTypeface(null, android.graphics.Typeface.BOLD);
-        nameView.setLayoutParams(params);
-
-        TextView amountView = new TextView(this);
-        amountView.setText("Items Donated");
-        amountView.setTextSize(16);
-        amountView.setLayoutParams(params);
-        amountView.setTextAlignment(TextView.TEXT_ALIGNMENT_VIEW_END);
-
-
-        row.addView(positionView);
-        row.addView(nameView);
-        row.addView(amountView);
-
-
-        View divider = new View(this);
-        divider.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                2
-        ));
-        divider.setBackgroundColor(0xFFCCCCCC);
-
-        positionView.setTextColor(0xFF222222);
-        nameView.setTextColor(0xFF222222);
-        amountView.setTextColor(0xFF222222);
-
-        leaderboard.addView(row);
-        leaderboard.addView(divider);
-    }
 
 }

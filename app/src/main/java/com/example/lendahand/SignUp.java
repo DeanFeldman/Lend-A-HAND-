@@ -5,10 +5,13 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import android.view.View;
 import java.util.Locale;
+
+import android.view.WindowManager;
 import android.widget.Button;
 
 import android.widget.EditText;
@@ -40,6 +43,7 @@ public class SignUp extends AppCompatActivity {
 
     TextView passwordHint,txtLogin;
     OkHttpClient client = new OkHttpClient();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

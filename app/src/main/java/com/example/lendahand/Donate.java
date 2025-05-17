@@ -200,11 +200,17 @@ public class Donate extends AppCompatActivity {
             totalAllocated += r.quantityToDonate;
         }
 
-        if (totalAllocated > 0 && totalAllocated <= totalAvailable) {
+        if (totalAllocated > 0) {
             donateButton.setVisibility(View.VISIBLE);
         } else {
             donateButton.setVisibility(View.GONE);
         }
+
+        if (totalAllocated > totalAvailable) {
+            CUSTOMTOAST.showCustomToast(this, "You've allocated more than your available amount.");
+            return;
+        }
+
     }
 
 

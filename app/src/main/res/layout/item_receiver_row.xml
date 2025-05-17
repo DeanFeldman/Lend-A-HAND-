@@ -6,13 +6,11 @@
     android:layout_margin="8dp"
     android:orientation="horizontal"
     android:padding="16dp"
-    android:background="@android:color/white"
+    android:background="@drawable/thick_border_background"
     android:elevation="4dp"
-    android:backgroundTint="#FFFFFF"
     android:gravity="center_vertical"
     android:clipToPadding="false"
-    android:layout_gravity="center_vertical"
-    >
+    android:layout_gravity="center_vertical">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -26,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="User"
-            android:textColor="#1A237E"
+            android:textColor="@color/colorOnBackground"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -46,8 +44,8 @@
                 android:id="@+id/text_quantity_needed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Needs: 5 items"
-                android:textColor="#607D8B"
+                android:text="Needs: X items"
+                android:textColor="@color/colorOnSurface"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -68,19 +66,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Johannesburg, South Africa"
-                android:textColor="#607D8B"
+                android:textColor="@color/colorOnSurface"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/input_donation"
-        android:layout_width="80dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="0"
-        android:inputType="number"
-        android:maxLength="2"
-        android:textColor="#000000"
-        android:gravity="center"
-        android:background="@android:drawable/editbox_background" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Items:"
+            android:textColor="@color/colorOnSurface"
+            android:textSize="14sp"
+            android:layout_marginBottom="4dp" />
+
+        <EditText
+            android:id="@+id/input_donation"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:hint="0"
+            android:inputType="number"
+            android:maxLength="3"
+            android:textColor="@color/colorOnBackground"
+            android:textColorHint="@color/colorOnSurface"
+            android:gravity="center"
+            android:background="@drawable/edittext_background" />
+    </LinearLayout>
+
 </LinearLayout>

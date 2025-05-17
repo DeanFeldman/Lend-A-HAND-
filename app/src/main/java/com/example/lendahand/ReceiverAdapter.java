@@ -83,18 +83,26 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
                 catch (NumberFormatException e) { }
 
                 if (value < 0) value = 0;
-                if (value > receiver.quantityNeeded) value = receiver.quantityNeeded;
+
+                if (value > receiver.quantityNeeded) {
+                    CUSTOMTOAST.showCustomToast(context, "Cannot donate more than " + receiver.quantityNeeded + " to " + receiver.name);
+                    value = receiver.quantityNeeded;
+                }
+
+                if (value > receiver.quantityNeeded){
+                    value = receiver.quantityNeeded;
+                }
 
                 receiver.quantityToDonate = value;
 
                 if (!input.equals(String.valueOf(value))) {
-
                     holder.donationInput.setText(String.valueOf(value));
                     holder.donationInput.setSelection(holder.donationInput.getText().length());
                 }
 
                 donationChangedListener.onDonationChanged();
             }
+
         });
 
     }
