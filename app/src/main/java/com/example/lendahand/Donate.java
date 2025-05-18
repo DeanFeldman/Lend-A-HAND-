@@ -3,6 +3,7 @@ package com.example.lendahand;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -93,7 +94,6 @@ public class Donate extends AppCompatActivity {
             startActivity(intent);
         });
 
-        qty = findViewById(R.id.input_quantity);
         //fill the arrays
         spinnerItems = findViewById(R.id.spinner_items);
         adapter = new ArrayAdapter<>(
@@ -128,6 +128,14 @@ public class Donate extends AppCompatActivity {
     private void fetchReceiversFromDatabase() {
         OkHttpClient client = new OkHttpClient();
 
+        Object selectedItem = spinnerItems.getSelectedItem();
+        if (selectedItem == null) {
+            runOnUiThread(() ->
+                    CUSTOMTOAST.showCustomToast(Donate.this, "Please select an item first.")
+            );
+            return;
+        }
+
         RequestBody formBody = new FormBody.Builder()
                 .add("item_name", spinnerItems.getSelectedItem().toString())
                 .build();
@@ -148,6 +156,8 @@ public class Donate extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String json = response.body().string();
 
+                    Log.d("DONATE_DEBUG", "Response: " + json);
+
                     try {
                         JSONArray jsonArray = new JSONArray(json);
                         receiverList.clear();
@@ -157,13 +167,17 @@ public class Donate extends AppCompatActivity {
 
                             int requestId = obj.getInt("request_id");
                             int userId = obj.getInt("user_id");
+                            int needed = obj.getInt("quantity_needed");
+
                             String name = obj.getString("user_fname") + " " + obj.getString("user_lname");
                             String bio = obj.getString("user_biography");
-                            int needed = obj.getInt("quantity_needed");
+                            String email = obj.getString("user_email");
+
                             SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                             int user_id = prefs.getInt("user_id", -1);
+
                             if(user_id!=userId) {
-                                receiverList.add(new Receiver(requestId, userId, name, bio, needed));
+                                receiverList.add(new Receiver(requestId, userId, name, email, bio, needed));
                             }
                         }
 
@@ -224,26 +238,6 @@ public class Donate extends AppCompatActivity {
         int newRemaining = r.quantityNeeded - quantity;
 
 
-        runOnUiThread(() -> {
-            String currentQtyStr = qty.getText().toString().trim();
-            int currentQty = 0;
-            try {
-                currentQty = Integer.parseInt(currentQtyStr);
-            } catch (NumberFormatException e) {
-                currentQty = 0;
-            }
-
-            int remaining = Math.max(0, currentQty - quantity);
-            qty.setText(String.valueOf(remaining));
-
-            r.quantityNeeded = newRemaining;
-            r.quantityToDonate = 0;
-
-            CUSTOMTOAST.showCustomToast(Donate.this, "Donation sent!");
-            receiverAdapter.notifyDataSetChanged();
-            checkDonationSum();
-        });
-
         RequestBody formBody = new FormBody.Builder()
                 .add("donor_user_id", String.valueOf(donor_user_id))
                 .add("request_id", String.valueOf(request_id))
@@ -256,6 +250,13 @@ public class Donate extends AppCompatActivity {
                 .build();
 
         client.newCall(request).enqueue(new okhttp3.Callback(){
+
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->  CUSTOMTOAST.showCustomToast(Donate.this, "Failed to send donation"));
+            }
+
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -272,15 +273,34 @@ public class Donate extends AppCompatActivity {
                             .post(formBody1)
                             .build();
 
+                    runOnUiThread(() -> {
+                        String currentQtyStr = qty.getText().toString().trim();
+                        int currentQty = 0;
+                        try {
+                            currentQty = Integer.parseInt(currentQtyStr);
+                        } catch (NumberFormatException e) {
+                            currentQty = 0;
+                        }
+
+                        int remaining = Math.max(0, currentQty - quantity);
+                        qty.setText(String.valueOf(remaining));
+
+                        r.quantityNeeded = newRemaining;
+                        r.quantityToDonate = 0;
+
+                        CUSTOMTOAST.showCustomToast(Donate.this, "Donation sent!");
+                        receiverAdapter.notifyDataSetChanged();
+                        checkDonationSum();
+                    });
+                    
+
                     client.newCall(request2).enqueue(new okhttp3.Callback(){
 
                         @Override
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             if(response.isSuccessful()){
                                 runOnUiThread(() ->{
-                                    CUSTOMTOAST.showCustomToast(Donate.this, "Donation sent & record updated!");
-                                    receiverAdapter.notifyDataSetChanged();
-                                    checkDonationSum();
+
 
                                     //send emails
                                     new Thread(() -> {
@@ -337,11 +357,7 @@ public class Donate extends AppCompatActivity {
                 }
             }
 
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                runOnUiThread(() ->  CUSTOMTOAST.showCustomToast(Donate.this, "Failed to send donation"));
-            }
+
         });
     }
 }
