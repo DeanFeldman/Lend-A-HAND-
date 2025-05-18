@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="24dp"
+        android:paddingBottom="64dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,7 +65,7 @@
             android:padding="24dp"
             android:background="@color/colorBackground"
             android:elevation="6dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="32dp"
             android:clipToPadding="false">
 
             <EditText
@@ -147,5 +148,8 @@
                     android:layout_marginStart="4dp"/>
             </LinearLayout>
         </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="60dp"/>
     </LinearLayout>
 </ScrollView>
