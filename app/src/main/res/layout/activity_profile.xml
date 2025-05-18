@@ -216,9 +216,9 @@
     </ScrollView>
     <Button
         android:id="@+id/button_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="32dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="38dp"
         android:text="&lt;"
         android:textStyle="bold"
         android:textSize="20dp"

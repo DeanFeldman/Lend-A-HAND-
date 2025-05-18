@@ -9,10 +9,12 @@
     android:fitsSystemWindows="true">
 
     <LinearLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="24dp"
+        android:paddingBottom="100dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,8 +43,9 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/form_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="800dp"
             android:orientation="vertical"
             android:background="@color/colorBackground"
             android:elevation="6dp"
@@ -109,15 +112,41 @@
                 android:padding="14dp"
                 android:layout_marginBottom="8dp"/>
 
+
             <TextView
-                android:id="@+id/password_hint"
+                android:id="@+id/password_length"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="• 8+ characters\n• Include a number\n• Special character"
+                android:text="❌ 8+ characters"
                 android:textColor="@color/colorOnSurface"
                 android:textSize="14sp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/password_upper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="❌ Uppercase letter"
+                android:textColor="@color/colorOnSurface"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/password_lower"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="❌ Lowercase letter"
+                android:textColor="@color/colorOnSurface"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/password_special"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="❌ Special character (!@#...)"
+                android:textColor="@color/colorOnSurface"
+                android:textSize="14sp"
+                android:paddingBottom="8dp"/>
+
 
             <EditText
                 android:id="@+id/input_confirm_password"
@@ -129,7 +158,8 @@
                 android:textColorHint="@color/colorOnSurface"
                 android:background="@drawable/edittext_background"
                 android:padding="14dp"
-                android:layout_marginBottom="24dp"/>
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="8dp"/>
 
             <Button
                 android:id="@+id/button_signup"

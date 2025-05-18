@@ -3,18 +3,25 @@ package com.example.lendahand;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.text.Editable;
 import android.text.TextUtils;
 
+import android.text.TextWatcher;
 import android.view.View;
 import java.util.Locale;
 
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +48,8 @@ public class SignUp extends AppCompatActivity {
     Button buttonSignUp ;
     EditText txtFName , txtLName , txtEmail, txtPassword,dtpDOB;
 
-    TextView passwordHint,txtLogin;
+    TextView txtLogin, passwordLength, passwordUpper,passwordLower,passwordSpecial;
+
     OkHttpClient client = new OkHttpClient();
 
 
@@ -49,23 +57,31 @@ public class SignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setContentView(R.layout.activity_sign_up);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.signup), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+
             return insets;
+
         });
+
         txtFName = findViewById(R.id.input_first_name);
         txtLName = findViewById(R.id.input_surname);
         txtEmail = findViewById(R.id.input_email);
         txtPassword = findViewById(R.id.input_password);
         buttonSignUp = findViewById(R.id.button_signup);
-        passwordHint = findViewById(R.id.password_hint);
         dtpDOB = findViewById(R.id.input_dob);
+        passwordLength = findViewById(R.id.password_length);
+        passwordUpper = findViewById(R.id.password_upper);
+        passwordLower = findViewById(R.id.password_lower);
+        passwordSpecial = findViewById(R.id.password_special);
+
 
         buttonSignUp.setOnClickListener(view -> {
-           processSignUp();
+            processSignUp();
         });
 
         txtLogin = findViewById(R.id.text_login);
@@ -94,9 +110,67 @@ public class SignUp extends AppCompatActivity {
 
             try {
                 datePickerDialog.getDatePicker().setCalendarViewShown(false);
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
 
             datePickerDialog.show();
+        });
+
+        txtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String pwd = s.toString();
+
+                // Rule 1: Length
+                if (pwd.length() >= 8) {
+                    passwordLength.setText(" ✅ 8+ characters");
+                } else {
+                    passwordLength.setText(" ❌ 8+ characters");
+                }
+
+                // Rule 2: Uppercase + lowercase
+                boolean hasUpper = false, hasLower = false;
+                for (char c : pwd.toCharArray()) {
+                    if (Character.isUpperCase(c)) hasUpper = true;
+                    if (Character.isLowerCase(c)) hasLower = true;
+                }
+
+                if (hasUpper) {
+                    passwordUpper.setText(" ✅ Uppercase letter");
+                } else {
+                    passwordUpper.setText(" ❌ Uppercase letter");
+                }
+
+                if (hasLower) {
+                    passwordLower.setText( " ✅ Lowercase letter");
+                } else {
+                    passwordLower.setText(" ❌ Lowercase letter");
+                }
+
+
+                // Rule 3: Special character
+                boolean hasSpecial = false;
+                for (char c : pwd.toCharArray()) {
+                    if (!Character.isLetterOrDigit(c)) {
+                        hasSpecial = true;
+                        break;
+                    }
+                }
+
+                if (hasSpecial) {
+                    passwordSpecial.setText(" ✅ Special character (!@#...)");
+                } else {
+                    passwordSpecial.setText(" ❌ Special character (!@#...)");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
         });
 
     }

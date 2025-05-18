@@ -12,7 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:paddingTop="72dp"
         tools:context=".Recieve">
 
         <LinearLayout
@@ -21,7 +20,6 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -29,6 +27,24 @@
                 android:gravity="center_horizontal"
                 android:paddingVertical="32dp">
 
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@color/colorBackground"
+                    android:elevation="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:padding="12dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/logo"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/lah_logo"
+                        android:contentDescription="Logo" />
+                </LinearLayout>
                 <TextView
                     android:id="@+id/receiver_title"
                     android:layout_width="wrap_content"
@@ -116,9 +132,9 @@
 
     <Button
         android:id="@+id/button_back"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="32dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="38dp"
         android:text="&lt;"
         android:textStyle="bold"
         android:textSize="20dp"
