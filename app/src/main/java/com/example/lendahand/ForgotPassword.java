@@ -3,6 +3,8 @@ package com.example.lendahand;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,10 +36,10 @@ public class ForgotPassword extends AppCompatActivity {
         EMAIL, CODE, PASSWORD
     }
 
-    EditText emailInput, verificationCodeInput, newPasswordInput;
+    EditText emailInput, verificationCodeInput, newPasswordInput,txtPasword;
     Button resetButton;
     LinearLayout stepEmail, stepCode, stepPassword;
-    TextView textBackToLogin;
+    TextView textBackToLogin, passwordLength, passwordUpper,passwordLower,passwordSpecial;
     Step currentStep = Step.EMAIL;
 
     OkHttpClient client = new OkHttpClient();
@@ -62,9 +64,16 @@ public class ForgotPassword extends AppCompatActivity {
         newPasswordInput = findViewById(R.id.input_new_password);
         resetButton = findViewById(R.id.button_reset_password);
 
+        passwordLength = findViewById(R.id.password_length);
+        passwordUpper = findViewById(R.id.password_upper);
+        passwordLower = findViewById(R.id.password_lower);
+        passwordSpecial = findViewById(R.id.password_special);
+
         stepEmail = findViewById(R.id.step_email);
         stepCode = findViewById(R.id.step_code);
         stepPassword = findViewById(R.id.step_password);
+
+        txtPasword = findViewById(R.id.input_new_password);
 
         textBackToLogin = findViewById(R.id.text_back_to_login);
         textBackToLogin.setOnClickListener(view -> {
@@ -87,12 +96,82 @@ public class ForgotPassword extends AppCompatActivity {
         });
 
         showStep(Step.EMAIL);
+
+
+        txtPasword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String pwd = s.toString();
+
+
+                if (pwd.length() >= 8) {
+                    passwordLength.setText(" ✅ 8+ characters");
+                } else {
+                    passwordLength.setText(" ❌ 8+ characters");
+                }
+
+                boolean hasUpper = false, hasLower = false;
+                for (char c : pwd.toCharArray()) {
+                    if (Character.isUpperCase(c)) hasUpper = true;
+                    if (Character.isLowerCase(c)) hasLower = true;
+                }
+
+                if (hasUpper) {
+                    passwordUpper.setText(" ✅ Uppercase letter");
+                } else {
+                    passwordUpper.setText(" ❌ Uppercase letter");
+                }
+
+                if (hasLower) {
+                    passwordLower.setText( " ✅ Lowercase letter");
+                } else {
+                    passwordLower.setText(" ❌ Lowercase letter");
+                }
+
+                boolean hasSpecial = false;
+                for (char c : pwd.toCharArray()) {
+                    if (!Character.isLetterOrDigit(c)) {
+                        hasSpecial = true;
+                        break;
+                    }
+                }
+
+                if (hasSpecial) {
+                    passwordSpecial.setText(" ✅ Special character (!@#...)");
+                } else {
+                    passwordSpecial.setText(" ❌ Special character (!@#...)");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
     }
 
     private void showStep(Step step) {
-        stepEmail.setVisibility(step == Step.EMAIL ? View.VISIBLE : View.GONE);
-        stepCode.setVisibility(step == Step.CODE ? View.VISIBLE : View.GONE);
-        stepPassword.setVisibility(step == Step.PASSWORD ? View.VISIBLE : View.GONE);
+        if (step == Step.EMAIL) {
+            stepEmail.setVisibility(View.VISIBLE);
+        } else {
+            stepEmail.setVisibility(View.GONE);
+        }
+
+        if (step == Step.CODE) {
+            stepCode.setVisibility(View.VISIBLE);
+        } else {
+            stepCode.setVisibility(View.GONE);
+        }
+
+        if (step == Step.PASSWORD) {
+            stepPassword.setVisibility(View.VISIBLE);
+        } else {
+            stepPassword.setVisibility(View.GONE);
+        }
+
         currentStep = step;
     }
 
@@ -102,7 +181,6 @@ public class ForgotPassword extends AppCompatActivity {
             CUSTOMTOAST.showCustomToast(this, "Please enter your email.");
             return;
         }
-
         enteredEmail = email;
 
         RequestBody formBody = new FormBody.Builder()
@@ -152,8 +230,7 @@ public class ForgotPassword extends AppCompatActivity {
             }
         });
 
-
-        CUSTOMTOAST.showCustomToast(this, "Verification code sent to " + email);
+        //CUSTOMTOAST.showCustomToast(this, "Verification code sent to " + email);
 
         showStep(Step.CODE);
     }
@@ -166,15 +243,13 @@ public class ForgotPassword extends AppCompatActivity {
             return;
         }
 
-
-
         RequestBody requestBody = new FormBody.Builder()
                 .add("user_email", enteredEmail)
                 .add("code", code)
                 .build();
 
         Request request = new Request.Builder()
-                .url("https://lamp.ms.wits.ac.za/home/s2698600/verify_code.php") // replace with your actual PHP URL
+                .url("https://lamp.ms.wits.ac.za/home/s2698600/verify_code.php")
                 .post(requestBody)
                 .build();
 

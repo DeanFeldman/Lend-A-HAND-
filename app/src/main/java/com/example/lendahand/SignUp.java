@@ -125,14 +125,13 @@ public class SignUp extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String pwd = s.toString();
 
-                // Rule 1: Length
+
                 if (pwd.length() >= 8) {
                     passwordLength.setText(" ✅ 8+ characters");
                 } else {
                     passwordLength.setText(" ❌ 8+ characters");
                 }
 
-                // Rule 2: Uppercase + lowercase
                 boolean hasUpper = false, hasLower = false;
                 for (char c : pwd.toCharArray()) {
                     if (Character.isUpperCase(c)) hasUpper = true;
@@ -151,8 +150,6 @@ public class SignUp extends AppCompatActivity {
                     passwordLower.setText(" ❌ Lowercase letter");
                 }
 
-
-                // Rule 3: Special character
                 boolean hasSpecial = false;
                 for (char c : pwd.toCharArray()) {
                     if (!Character.isLetterOrDigit(c)) {
