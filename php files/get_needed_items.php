@@ -18,6 +18,7 @@ $stmt = $link->prepare("
         u.user_fname,
         u.user_lname,
         u.user_biography,
+        u.user_email,
         r.quantity_needed
     FROM REQUEST r
     JOIN USERS u ON u.user_id = r.user_id
@@ -37,6 +38,7 @@ while ($row = $result->fetch_assoc()) {
         "user_fname" => $row["user_fname"],
         "user_lname" => $row["user_lname"],
         "user_biography" => $row["user_biography"],
+        "user_email"=>$row["user_biography"],
         "quantity_needed" => $row["quantity_needed"]
     ];
 }
