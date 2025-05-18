@@ -38,7 +38,7 @@ while ($row = $result->fetch_assoc()) {
         "user_fname" => $row["user_fname"],
         "user_lname" => $row["user_lname"],
         "user_biography" => $row["user_biography"],
-        "user_email"=>$row["user_biography"],
+        "user_email"=>$row["user_email"],
         "quantity_needed" => $row["quantity_needed"]
     ];
 }
