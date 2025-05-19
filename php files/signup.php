@@ -1,11 +1,13 @@
 <?php
+
 include 'db_connect.php';
 
 $user_fname = $_REQUEST['user_fname'] ?? null;
 $user_lname = $_REQUEST['user_lname'] ?? null;
 $user_dob = $_REQUEST['user_dob'] ?? null;
 $user_email = $_REQUEST['user_email'] ?? null;
-$user_password = isset($_REQUEST['user_password']) ? password_hash($_REQUEST['user_password'], PASSWORD_DEFAULT) : null;$user_biography = $_REQUEST['user_biography'] ?? null;
+$user_password = isset($_REQUEST['user_password']) ? password_hash($_REQUEST['user_password'], PASSWORD_DEFAULT) : null;
+$user_biography = $_REQUEST['user_biography'] ?? null;
 
 if (!$user_fname || !$user_lname || !$user_dob || !$user_email || !$user_password) {
     echo json_encode([
@@ -30,7 +32,7 @@ if (mysqli_stmt_num_rows($stmt) > 0) {
     // Insert user
     $insert_stmt = mysqli_prepare($link, "INSERT INTO USERS (user_fname, user_lname, user_dob, user_email, user_password, user_biography) VALUES (?, ?, ?, ?, ?, ?)");
     mysqli_stmt_bind_param($insert_stmt, "ssssss", $user_fname, $user_lname, $user_dob, $user_email, $user_password, $user_biography);
-
+    
     if (mysqli_stmt_execute($insert_stmt)) {
         $response["success"] = true;
         $response["message"] = "User registered successfully!";

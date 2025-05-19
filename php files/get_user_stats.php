@@ -40,6 +40,7 @@ $received_stmt = $link->prepare("
     GROUP BY i.item_name
 ");
 
+
 if ($received_stmt) {
     $received_stmt->bind_param("i", $user_id);
     $received_stmt->execute();

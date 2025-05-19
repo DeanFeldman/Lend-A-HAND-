@@ -70,3 +70,4 @@ if ($exists) {
 echo json_encode($response);
 mysqli_close($link);
 ?>
+

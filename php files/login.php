@@ -15,10 +15,10 @@ if ($row = mysqli_fetch_assoc($result)) {
     if (password_verify($user_password, $row['user_password'])) {
         $response["success"] = true;
         $response["message"] = "Login successful!";
-
+        
         // Remove the password from the returned user data
         unset($row['user_password']);
-
+        
         $response["user"] = $row;
     } else {
         $response["success"] = false;

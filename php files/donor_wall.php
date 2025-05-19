@@ -5,9 +5,9 @@ if (!$link) {
     die(json_encode(["success" => false, "message" => "Connection failed: " . mysqli_connect_error()]));
 }
 
-$sql = "SELECT
-            u.user_fname AS first_name,
-            u.user_lname AS last_name,
+$sql = "SELECT 
+            u.user_fname AS first_name, 
+            u.user_lname AS last_name, 
             SUM(d.quantity_donated) AS total_donated
         FROM DONATION d
         JOIN USERS u ON d.donor_user_id = u.user_id

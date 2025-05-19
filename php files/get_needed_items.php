@@ -11,6 +11,7 @@ if (!$item_name) {
 
 $data = array();
 
+
 $stmt = $link->prepare("
     SELECT 
         r.request_id,
@@ -18,12 +19,12 @@ $stmt = $link->prepare("
         u.user_fname,
         u.user_lname,
         u.user_biography,
-        u.user_email,
+	u.user_email,
         r.quantity_needed
     FROM REQUEST r
     JOIN USERS u ON u.user_id = r.user_id
     JOIN ITEM i ON r.item_id = i.item_id
-    WHERE i.item_name = ?
+    WHERE LOWER(i.item_name) = LOWER(?)
     AND r.fulfilled = 0
 ");
 
@@ -38,10 +39,12 @@ while ($row = $result->fetch_assoc()) {
         "user_fname" => $row["user_fname"],
         "user_lname" => $row["user_lname"],
         "user_biography" => $row["user_biography"],
-        "user_email"=>$row["user_email"],
+	"user_email" => $row["user_email"],
         "quantity_needed" => $row["quantity_needed"]
     ];
 }
 
 echo json_encode($data);
 ?>
+
+
