@@ -45,20 +45,20 @@ public class Donorwall extends AppCompatActivity {
         leaderboard = findViewById(R.id.leaderboardContainer);
         fetchDonorsFromDatabase();
 
-        Button buttonProfile = findViewById(R.id.button_Profile);
-        buttonProfile.setOnClickListener(view -> {
+        Button btnProfile = findViewById(R.id.button_Profile);
+        btnProfile.setOnClickListener(view -> {
             Intent intent = new Intent(Donorwall.this, Profile.class);
             startActivity(intent);
         });
 
-        Button buttonDonate = findViewById(R.id.button_Donate);
-        buttonDonate.setOnClickListener(view -> {
+        Button btnDonate = findViewById(R.id.button_Donate);
+        btnDonate.setOnClickListener(view -> {
             Intent intent = new Intent(Donorwall.this, Donate.class);
             startActivity(intent);
         });
 
-        Button buttonRecieve = findViewById(R.id.button_Recieve);
-        buttonRecieve.setOnClickListener(view -> {
+        Button btnRecieve = findViewById(R.id.button_Recieve);
+        btnRecieve.setOnClickListener(view -> {
             Intent intent = new Intent(Donorwall.this, Recieve.class);
             startActivity(intent);
         });
@@ -114,7 +114,7 @@ public class Donorwall extends AppCompatActivity {
         TextView nameView = card.findViewById(R.id.text_name);
         TextView amountView = card.findViewById(R.id.text_amount);
 
-        rankView.setText(position + ".");
+        
         nameView.setText(name);
         amountView.setText((int) amount + " items");
 
@@ -132,6 +132,7 @@ public class Donorwall extends AppCompatActivity {
                 nameView.setTextColor(0xFFCD7F32);
                 break;
             default:
+                rankView.setText(position + ".");
                 break;
         }
 

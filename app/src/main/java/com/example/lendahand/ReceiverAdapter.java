@@ -1,6 +1,5 @@
 package com.example.lendahand;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -33,15 +32,15 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameText, neededText, userBio;
-        EditText donationInput;
+        TextView txtName, txtNeeded, txtUserBio;
+        EditText txtDonationInput;
 
         public ViewHolder(View view) {
             super(view);
-            nameText = view.findViewById(R.id.text_receiver_name);
-            neededText = view.findViewById(R.id.text_quantity_needed);
-            donationInput = view.findViewById(R.id.input_donation);
-            userBio = view.findViewById(R.id.text_receiver_bio);
+            txtName = view.findViewById(R.id.text_receiver_name);
+            txtNeeded = view.findViewById(R.id.text_quantity_needed);
+            txtDonationInput = view.findViewById(R.id.input_donation);
+            txtUserBio = view.findViewById(R.id.text_receiver_bio);
         }
     }
 
@@ -56,17 +55,17 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
     public void onBindViewHolder(@NonNull ReceiverAdapter.ViewHolder holder, int position) {
         Receiver receiver = receiverList.get(position);
 
-        holder.userBio.setText(receiver.biography);
-        holder.nameText.setText(receiver.name);
-        holder.neededText.setText("Needs: " + receiver.quantityNeeded);
+        holder.txtUserBio.setText(receiver.biography);
+        holder.txtName.setText(receiver.name);
+        holder.txtNeeded.setText("Needs: " + receiver.quantityNeeded);
 
-        holder.donationInput.setFilters(new InputFilter[] {
+        holder.txtDonationInput.setFilters(new InputFilter[] {
                 new InputFilter.LengthFilter(3)
         });
 
-        holder.donationInput.setText(String.valueOf(receiver.quantityToDonate));
+        holder.txtDonationInput.setText(String.valueOf(receiver.quantityToDonate));
 
-        holder.donationInput.addTextChangedListener(new TextWatcher() {
+        holder.txtDonationInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
@@ -89,15 +88,12 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
                     value = receiver.quantityNeeded;
                 }
 
-                if (value > receiver.quantityNeeded){
-                    value = receiver.quantityNeeded;
-                }
 
                 receiver.quantityToDonate = value;
 
                 if (!input.equals(String.valueOf(value))) {
-                    holder.donationInput.setText(String.valueOf(value));
-                    holder.donationInput.setSelection(holder.donationInput.getText().length());
+                    holder.txtDonationInput.setText(String.valueOf(value));
+                    holder.txtDonationInput.setSelection(holder.txtDonationInput.getText().length());
                 }
 
                 donationChangedListener.onDonationChanged();

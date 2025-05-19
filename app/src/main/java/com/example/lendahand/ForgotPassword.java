@@ -36,14 +36,13 @@ public class ForgotPassword extends AppCompatActivity {
         EMAIL, CODE, PASSWORD
     }
 
-    EditText emailInput, verificationCodeInput, newPasswordInput,txtPasword;
-    Button resetButton;
+    EditText txtEmail, txtVerificationCode, txtPasword;
+    Button btnReset;
     LinearLayout stepEmail, stepCode, stepPassword;
-    TextView textBackToLogin, passwordLength, passwordUpper,passwordLower,passwordSpecial;
+    TextView txtBackToLogin, txtPasswordLength, txtPasswordUpper, txtPasswordLower, txtPasswordSpecial;
     Step currentStep = Step.EMAIL;
 
     OkHttpClient client = new OkHttpClient();
-    String verificationCode ="";
     String enteredEmail = "";
 
     @Override
@@ -59,15 +58,15 @@ public class ForgotPassword extends AppCompatActivity {
         });
 
         // Initialize views
-        emailInput = findViewById(R.id.input_email);
-        verificationCodeInput = findViewById(R.id.input_verification_code);
-        newPasswordInput = findViewById(R.id.input_new_password);
-        resetButton = findViewById(R.id.button_reset_password);
+        txtEmail = findViewById(R.id.input_email);
+        txtVerificationCode = findViewById(R.id.input_verification_code);
+        txtPasword = findViewById(R.id.input_new_password);
+        btnReset = findViewById(R.id.button_reset_password);
 
-        passwordLength = findViewById(R.id.password_length);
-        passwordUpper = findViewById(R.id.password_upper);
-        passwordLower = findViewById(R.id.password_lower);
-        passwordSpecial = findViewById(R.id.password_special);
+        txtPasswordLength = findViewById(R.id.password_length);
+        txtPasswordUpper = findViewById(R.id.password_upper);
+        txtPasswordLower = findViewById(R.id.password_lower);
+        txtPasswordSpecial = findViewById(R.id.password_special);
 
         stepEmail = findViewById(R.id.step_email);
         stepCode = findViewById(R.id.step_code);
@@ -75,13 +74,13 @@ public class ForgotPassword extends AppCompatActivity {
 
         txtPasword = findViewById(R.id.input_new_password);
 
-        textBackToLogin = findViewById(R.id.text_back_to_login);
-        textBackToLogin.setOnClickListener(view -> {
+        txtBackToLogin = findViewById(R.id.text_back_to_login);
+        txtBackToLogin.setOnClickListener(view -> {
             Intent intent = new Intent(ForgotPassword.this, MainActivity.class);
             startActivity(intent);
         });
 
-        resetButton.setOnClickListener(v -> {
+        btnReset.setOnClickListener(v -> {
             switch (currentStep) {
                 case EMAIL:
                     requestResetCode();
@@ -109,9 +108,9 @@ public class ForgotPassword extends AppCompatActivity {
 
 
                 if (pwd.length() >= 8) {
-                    passwordLength.setText(" ✅ 8+ characters");
+                    txtPasswordLength.setText(" ✅ 8+ characters");
                 } else {
-                    passwordLength.setText(" ❌ 8+ characters");
+                    txtPasswordLength.setText(" ❌ 8+ characters");
                 }
 
                 boolean hasUpper = false, hasLower = false;
@@ -121,15 +120,15 @@ public class ForgotPassword extends AppCompatActivity {
                 }
 
                 if (hasUpper) {
-                    passwordUpper.setText(" ✅ Uppercase letter");
+                    txtPasswordUpper.setText(" ✅ Uppercase letter");
                 } else {
-                    passwordUpper.setText(" ❌ Uppercase letter");
+                    txtPasswordUpper.setText(" ❌ Uppercase letter");
                 }
 
                 if (hasLower) {
-                    passwordLower.setText( " ✅ Lowercase letter");
+                    txtPasswordLower.setText( " ✅ Lowercase letter");
                 } else {
-                    passwordLower.setText(" ❌ Lowercase letter");
+                    txtPasswordLower.setText(" ❌ Lowercase letter");
                 }
 
                 boolean hasSpecial = false;
@@ -141,9 +140,9 @@ public class ForgotPassword extends AppCompatActivity {
                 }
 
                 if (hasSpecial) {
-                    passwordSpecial.setText(" ✅ Special character (!@#...)");
+                    txtPasswordSpecial.setText(" ✅ Special character (!@#...)");
                 } else {
-                    passwordSpecial.setText(" ❌ Special character (!@#...)");
+                    txtPasswordSpecial.setText(" ❌ Special character (!@#...)");
                 }
             }
 
@@ -176,7 +175,7 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     private void requestResetCode() {
-        String email = emailInput.getText().toString().trim();
+        String email = txtEmail.getText().toString().trim();
         if (email.isEmpty()) {
             CUSTOMTOAST.showCustomToast(this, "Please enter your email.");
             return;
@@ -213,7 +212,7 @@ public class ForgotPassword extends AppCompatActivity {
                                 sender.sendEmail(
                                         email,
                                         "Password Reset Code",
-                                        "Hi " + fname + ",\n\nYour password reset code is: " + code + "\n\nIt expires in 15 minutes."
+                                        "Hi " + fname + ",\n\nYour password reset code is: " + code + "\n\nIt expires in 15 minutes.\n\nRegards,\nThe Lend A Hand Team"
                                 );
                             }).start();
 
@@ -236,7 +235,7 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     private void verifyCode() {
-        String code = verificationCodeInput.getText().toString().trim();
+        String code = txtVerificationCode.getText().toString().trim();
 
         if (code.isEmpty()) {
             CUSTOMTOAST.showCustomToast(this, "Please enter the verification code.");
@@ -283,7 +282,7 @@ public class ForgotPassword extends AppCompatActivity {
     }
 
     private void resetPassword() {
-        String newPassword = newPasswordInput.getText().toString().trim();
+        String newPassword = txtPasword.getText().toString().trim();
 
         if (newPassword.isEmpty()) {
             CUSTOMTOAST.showCustomToast(this, "Please enter a new password.");
@@ -344,7 +343,7 @@ public class ForgotPassword extends AppCompatActivity {
                                 EmailSender sender = new EmailSender();
                                 sender.sendEmail(enteredEmail,
                                         "Password Reset Confirmation",
-                                        "Hi " + fname + ",\n\nYour password was successfully reset.\nIf this wasn't you, please reply to this email.");
+                                        "Hi " + fname + ",\n\nYour password was successfully reset.\nIf this wasn't you, please reply to this email.\n\nRegards,\nThe Lend A Hand Team");
                             }).start();
 
                             Intent intent = new Intent(ForgotPassword.this, MainActivity.class);

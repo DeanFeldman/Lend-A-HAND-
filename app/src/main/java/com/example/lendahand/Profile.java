@@ -31,8 +31,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
-        private EditText editTextName,editTextBio;
-        private TextView displayEmail,donatedSummary,receivedSummary,donorContacts;
+        private EditText txtName, txtBio;
+        private TextView txtEmail, txtDonatedSummary, txtReceivedSummary, txtDonorContacts;
 
 
     @Override
@@ -46,21 +46,21 @@ public class Profile extends AppCompatActivity {
             return insets;
         });
 
-        editTextName = findViewById(R.id.input_name);
-        editTextBio  = findViewById(R.id.input_bio);
-        displayEmail = findViewById(R.id.display_email);
-        donatedSummary = findViewById(R.id.text_donated_summary);
-        receivedSummary = findViewById(R.id.text_received_summary);
-        donorContacts = findViewById(R.id.text_donor_contacts);
+        txtName = findViewById(R.id.input_name);
+        txtBio = findViewById(R.id.input_bio);
+        txtEmail = findViewById(R.id.display_email);
+        txtDonatedSummary = findViewById(R.id.text_donated_summary);
+        txtReceivedSummary = findViewById(R.id.text_received_summary);
+        txtDonorContacts = findViewById(R.id.text_donor_contacts);
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String email = prefs.getString("user_email", "");
         int user_Id = prefs.getInt("user_id",-1);
 
         if(user_Id != -1){
-            fetchUserStats(user_Id, donatedSummary, receivedSummary);
+            fetchUserStats(user_Id, txtDonatedSummary, txtReceivedSummary);
         }
-        displayEmail.setText(email);
+        txtEmail.setText(email);
 
 
         Button buttonBack = findViewById(R.id.button_back);
@@ -75,12 +75,12 @@ public class Profile extends AppCompatActivity {
         Button buttonLogin = findViewById(R.id.button_save_profile);
 
         buttonLogin.setOnClickListener(view -> {
-            String fullName = editTextName.getText().toString().trim();
+            String fullName = txtName.getText().toString().trim();
             String[] nameParts = fullName.split(" ", 2);
 
             String fname = "";
             String lname = "";
-            String bio = editTextBio.getText().toString().trim();
+            String bio = txtBio.getText().toString().trim();
 
             if (nameParts.length == 1) {
                 fname = nameParts[0];
@@ -111,7 +111,7 @@ public class Profile extends AppCompatActivity {
         });
 
 
-        fetchDonorContacts(user_Id, donorContacts);
+        fetchDonorContacts(user_Id, txtDonorContacts);
         fetchUserFromDatabase();
     }
 
@@ -154,8 +154,8 @@ public class Profile extends AppCompatActivity {
                             String bio = obj.getString("biography");
 
                             runOnUiThread(() -> {
-                                editTextName.setText(name);
-                                editTextBio.setText(bio);
+                                txtName.setText(name);
+                                txtBio.setText(bio);
                             });
                         }
                     } catch (JSONException e) {

@@ -3,25 +3,19 @@ package com.example.lendahand;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Rect;
 import android.os.Bundle;
 
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 
 import android.text.TextWatcher;
-import android.view.View;
+
 import java.util.Locale;
 
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +39,10 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
-    Button buttonSignUp ;
+    Button btnSignUp;
     EditText txtFName , txtLName , txtEmail, txtPassword,dtpDOB;
 
-    TextView txtLogin, passwordLength, passwordUpper,passwordLower,passwordSpecial;
+    TextView txtLogin, txtPasswordLength, txtPasswordUpper, txtPasswordLower, txtPasswordSpecial;
 
     OkHttpClient client = new OkHttpClient();
 
@@ -72,15 +66,15 @@ public class SignUp extends AppCompatActivity {
         txtLName = findViewById(R.id.input_surname);
         txtEmail = findViewById(R.id.input_email);
         txtPassword = findViewById(R.id.input_password);
-        buttonSignUp = findViewById(R.id.button_signup);
+        btnSignUp = findViewById(R.id.button_signup);
         dtpDOB = findViewById(R.id.input_dob);
-        passwordLength = findViewById(R.id.password_length);
-        passwordUpper = findViewById(R.id.password_upper);
-        passwordLower = findViewById(R.id.password_lower);
-        passwordSpecial = findViewById(R.id.password_special);
+        txtPasswordLength = findViewById(R.id.password_length);
+        txtPasswordUpper = findViewById(R.id.password_upper);
+        txtPasswordLower = findViewById(R.id.password_lower);
+        txtPasswordSpecial = findViewById(R.id.password_special);
 
 
-        buttonSignUp.setOnClickListener(view -> {
+        btnSignUp.setOnClickListener(view -> {
             processSignUp();
         });
 
@@ -127,9 +121,9 @@ public class SignUp extends AppCompatActivity {
 
 
                 if (pwd.length() >= 8) {
-                    passwordLength.setText(" ✅ 8+ characters");
+                    txtPasswordLength.setText(" ✅ 8+ characters");
                 } else {
-                    passwordLength.setText(" ❌ 8+ characters");
+                    txtPasswordLength.setText(" ❌ 8+ characters");
                 }
 
                 boolean hasUpper = false, hasLower = false;
@@ -139,15 +133,15 @@ public class SignUp extends AppCompatActivity {
                 }
 
                 if (hasUpper) {
-                    passwordUpper.setText(" ✅ Uppercase letter");
+                    txtPasswordUpper.setText(" ✅ Uppercase letter");
                 } else {
-                    passwordUpper.setText(" ❌ Uppercase letter");
+                    txtPasswordUpper.setText(" ❌ Uppercase letter");
                 }
 
                 if (hasLower) {
-                    passwordLower.setText( " ✅ Lowercase letter");
+                    txtPasswordLower.setText( " ✅ Lowercase letter");
                 } else {
-                    passwordLower.setText(" ❌ Lowercase letter");
+                    txtPasswordLower.setText(" ❌ Lowercase letter");
                 }
 
                 boolean hasSpecial = false;
@@ -159,9 +153,9 @@ public class SignUp extends AppCompatActivity {
                 }
 
                 if (hasSpecial) {
-                    passwordSpecial.setText(" ✅ Special character (!@#...)");
+                    txtPasswordSpecial.setText(" ✅ Special character (!@#...)");
                 } else {
-                    passwordSpecial.setText(" ❌ Special character (!@#...)");
+                    txtPasswordSpecial.setText(" ❌ Special character (!@#...)");
                 }
             }
 

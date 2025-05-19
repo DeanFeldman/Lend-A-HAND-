@@ -7,7 +7,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +29,7 @@ import okhttp3.Response;
 public class Recieve extends AppCompatActivity {
     private Spinner spinnerItems;
     private ArrayAdapter<String> adapter;
-    private EditText quantityInput;
+    private EditText txtQuantityInput;
     private int user_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +51,8 @@ public class Recieve extends AppCompatActivity {
             return;
         }
         spinnerItems = findViewById(R.id.spinner_needed_items);
-        quantityInput = findViewById(R.id.input_needed_quantity);
-        Button submitButton = findViewById(R.id.button_add_request);
+        txtQuantityInput = findViewById(R.id.input_needed_quantity);
+        Button btnSubmit = findViewById(R.id.button_add_request);
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, new ArrayList<>());
         spinnerItems.setAdapter(adapter);
@@ -70,7 +69,7 @@ public class Recieve extends AppCompatActivity {
             });
         }).start();
 
-        submitButton.setOnClickListener(v -> {
+        btnSubmit.setOnClickListener(v -> {
             submitRequest();
         });
 
@@ -83,7 +82,7 @@ public class Recieve extends AppCompatActivity {
     }
     private void submitRequest() {
         String itemName = spinnerItems.getSelectedItem().toString();
-        String quantityStr = quantityInput.getText().toString().trim();
+        String quantityStr = txtQuantityInput.getText().toString().trim();
 
         if (quantityStr.isEmpty()) {
             CUSTOMTOAST.showCustomToast(this, "Please enter quantity");
@@ -116,7 +115,7 @@ public class Recieve extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 runOnUiThread(() -> {
                     CUSTOMTOAST.showCustomToast(Recieve.this, "Request submitted successfully!");
-                    quantityInput.setText("");
+                    txtQuantityInput.setText("");
                 });
                     SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                     String userEmail = prefs.getString("user_email", "you@example.com");

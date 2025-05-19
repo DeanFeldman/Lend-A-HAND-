@@ -4,8 +4,6 @@ package com.example.lendahand;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +31,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     EditText emailInput, passwordInput;
-    Button buttonLogin;
+    Button btnLogin;
     OkHttpClient client = new OkHttpClient();
 
     @Override
@@ -49,32 +47,32 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        TextView Forgotpassword = findViewById(R.id.text_forgot_password);
-        Forgotpassword.setOnClickListener(view -> {
+        TextView txtForgotPassword = findViewById(R.id.text_forgot_password);
+        txtForgotPassword.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, ForgotPassword.class);
             startActivity(intent);
         });
 
-        TextView textLogin = findViewById(R.id.here);
-        textLogin.setOnClickListener(view -> {
+        TextView txtLogin = findViewById(R.id.here);
+        txtLogin.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, SignUp.class);
             startActivity(intent);
         });
 
-        buttonLogin = findViewById(R.id.button_login);
+        btnLogin = findViewById(R.id.button_login);
         emailInput = findViewById(R.id.input_email);
         passwordInput = findViewById(R.id.input_password);
 
-        buttonLogin.setOnClickListener(view -> {
+        btnLogin.setOnClickListener(view -> {
             processLogin();
         });
     }
         private void processLogin() {
-                String email = emailInput.getText().toString().trim();
-                String password = passwordInput.getText().toString().trim();
+                String email = emailInput.getText().toString();
+                String password = passwordInput.getText().toString();
 
                 if (email.isEmpty() || password.isEmpty()) {
-                    CUSTOMTOAST.showCustomToast(MainActivity.this, "Please enter email and password");
+                    CUSTOMTOAST.showCustomToast(MainActivity.this, "Please enter email and password.");
                     return;
                 }
 

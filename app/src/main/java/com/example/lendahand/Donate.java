@@ -15,12 +15,10 @@ import java.util.List;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -32,8 +30,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-
 import okhttp3.Call;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -43,14 +39,14 @@ import okhttp3.Response;
 
 public class Donate extends AppCompatActivity {
 
-    private Spinner spinnerItems;
+    private Spinner spnItems;
     private int user_id;
-    EditText qty;
+    EditText txtQty;
     private ArrayAdapter<String> adapter;
     private RecyclerView recyclerView;
     private ReceiverAdapter receiverAdapter;
     private List<Receiver> receiverList = new ArrayList<>();
-    private Button donateButton;
+    private Button btnDonate;
 
 
     @Override
@@ -69,7 +65,7 @@ public class Donate extends AppCompatActivity {
         receiverAdapter = new ReceiverAdapter(this, receiverList, this::checkDonationSum);
         recyclerView.setAdapter(receiverAdapter);
 
-        qty = findViewById(R.id.input_quantity);
+        txtQty = findViewById(R.id.input_quantity);
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         user_id = prefs.getInt("user_id", -1);
@@ -79,8 +75,8 @@ public class Donate extends AppCompatActivity {
             return;
         }
 
-        donateButton = findViewById(R.id.button_donate_to_receiver);
-        donateButton.setOnClickListener(v -> {
+        btnDonate = findViewById(R.id.button_donate_to_receiver);
+        btnDonate.setOnClickListener(v -> {
             for (Receiver r : receiverList) {
                 if (r.quantityToDonate > 0) {
                     sendDonation(r);
@@ -95,15 +91,15 @@ public class Donate extends AppCompatActivity {
         });
 
         //fill the arrays
-        spinnerItems = findViewById(R.id.spinner_items);
+        spnItems = findViewById(R.id.spinner_items);
         adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
                 new ArrayList<String>());
 
-        spinnerItems.setAdapter(adapter);
+        spnItems.setAdapter(adapter);
 
-        spinnerItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spnItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 fetchReceiversFromDatabase();
@@ -128,7 +124,7 @@ public class Donate extends AppCompatActivity {
     private void fetchReceiversFromDatabase() {
         OkHttpClient client = new OkHttpClient();
 
-        Object selectedItem = spinnerItems.getSelectedItem();
+        Object selectedItem = spnItems.getSelectedItem();
         if (selectedItem == null) {
             runOnUiThread(() ->
                     CUSTOMTOAST.showCustomToast(Donate.this, "Please select an item first.")
@@ -137,7 +133,7 @@ public class Donate extends AppCompatActivity {
         }
 
         RequestBody formBody = new FormBody.Builder()
-                .add("item_name", spinnerItems.getSelectedItem().toString())
+                .add("item_name", spnItems.getSelectedItem().toString())
                 .build();
 
         Request request = new Request.Builder()
@@ -196,7 +192,7 @@ public class Donate extends AppCompatActivity {
         int totalAvailable = 0;
 
 
-        String input = qty.getText().toString().trim();
+        String input = txtQty.getText().toString().trim();
         if (!input.isEmpty()) {
             try {
                 totalAvailable = Integer.parseInt(input);
@@ -207,7 +203,7 @@ public class Donate extends AppCompatActivity {
 
         for (Receiver r : receiverList) {
             if (r.quantityToDonate > r.quantityNeeded) {
-                donateButton.setVisibility(View.GONE);
+                btnDonate.setVisibility(View.GONE);
                 CUSTOMTOAST.showCustomToast(this, "Cannot allocate more than " + r.quantityNeeded + " to " + r.name);
                 return;
             }
@@ -215,9 +211,9 @@ public class Donate extends AppCompatActivity {
         }
 
         if (totalAllocated > 0) {
-            donateButton.setVisibility(View.VISIBLE);
+            btnDonate.setVisibility(View.VISIBLE);
         } else {
-            donateButton.setVisibility(View.GONE);
+            btnDonate.setVisibility(View.GONE);
         }
 
         if (totalAllocated > totalAvailable) {
@@ -274,7 +270,7 @@ public class Donate extends AppCompatActivity {
                             .build();
 
                     runOnUiThread(() -> {
-                        String currentQtyStr = qty.getText().toString().trim();
+                        String currentQtyStr = txtQty.getText().toString().trim();
                         int currentQty = 0;
                         try {
                             currentQty = Integer.parseInt(currentQtyStr);
@@ -283,7 +279,7 @@ public class Donate extends AppCompatActivity {
                         }
 
                         int remaining = Math.max(0, currentQty - quantity);
-                        qty.setText(String.valueOf(remaining));
+                        txtQty.setText(String.valueOf(remaining));
 
                         r.quantityNeeded = newRemaining;
                         r.quantityToDonate = 0;
@@ -311,7 +307,7 @@ public class Donate extends AppCompatActivity {
                                         String receiverEmail = r.getEmail();
                                         String receiverName = r.getName();
 
-                                        String itemName = spinnerItems.getSelectedItem().toString();
+                                        String itemName = spnItems.getSelectedItem().toString();
 
                                         EmailSender sender = new EmailSender();
 
