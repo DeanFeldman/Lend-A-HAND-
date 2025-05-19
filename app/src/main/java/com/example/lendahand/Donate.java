@@ -295,17 +295,30 @@ public class Donate extends AppCompatActivity {
                         @Override
                         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                             if(response.isSuccessful()){
+                                SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                                String donorEmail = prefs.getString("user_email", "donor@example.com");
+                                String donorName = prefs.getString("user_fname", "Donor");
+                                String receiverEmail = r.getEmail();
+                                String receiverName = r.getName();
+
+                                runOnUiThread(()->{
+                                    // show a pop up
+                                    runOnUiThread(() -> {
+                                        new AlertDialog.Builder(Donate.this)
+                                                .setTitle("Emails Sent")
+                                                .setMessage("Confirmation email sent to:\n" + donorEmail +
+                                                        "\n Notification email sent to:\n" + receiverEmail)
+                                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                                .show();
+                                    });
+
+                                });
                                 runOnUiThread(() ->{
 
 
                                     //send emails
                                     new Thread(() -> {
-                                        SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-                                        String donorEmail = prefs.getString("user_email", "donor@example.com");
-                                        String donorName = prefs.getString("user_fname", "Donor");
 
-                                        String receiverEmail = r.getEmail();
-                                        String receiverName = r.getName();
 
                                         String itemName = spnItems.getSelectedItem().toString();
 
@@ -323,16 +336,7 @@ public class Donate extends AppCompatActivity {
                                                 " from " + donorName + " (" + donorEmail + ").\nPlease check your account for updates.";
                                         sender.sendEmail(receiverEmail, receiverSubject, receiverBody);
 
-                                        // show a pop up
-                                        runOnUiThread(() -> {
-                                            // 2. Alert Dialog
-                                            new AlertDialog.Builder(Donate.this)
-                                                    .setTitle("Emails Sent")
-                                                    .setMessage("Confirmation email sent to:\n" + donorEmail +
-                                                            "\n Notification email sent to:\n" + receiverEmail)
-                                                    .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                                    .show();
-                                        });
+
                                     }).start();
 
                                 });
