@@ -123,7 +123,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/receiver_recycler"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_marginBottom="24dp"
                     android:background="@color/colorSurface"
                     tools:listitem="@layout/item_receiver_row"/>
@@ -145,6 +145,10 @@
                     android:background="@color/colorOnSurface"
                     android:layout_marginBottom="24dp"/>
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="150dp"/>
         </LinearLayout>
     </ScrollView>
 
@@ -152,7 +156,8 @@
         android:id="@+id/button_back"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_margin="38dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="25dp"
         android:text="&lt;"
         android:textStyle="bold"
         android:textSize="20dp"
