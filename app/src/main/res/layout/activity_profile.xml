@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="24dp"
-                android:background="@color/colorBackground"
+                android:background="@drawable/rounded_background"
                 android:elevation="6dp"
                 android:layout_marginBottom="24dp"
                 android:clipToPadding="false">
@@ -176,11 +176,18 @@
                     android:textSize="14sp"
                     android:layout_marginBottom="16dp"/>
 
+                <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorOnSurface"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"/>
+
                 <TextView
                     android:id="@+id/text_donor_contacts_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Donors Who Helped You"
+                    android:text="Donors Who Have Helped You"
                     android:textColor="@color/colorOnBackground"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -199,7 +206,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorOnSurface"
-                    android:layout_marginBottom="24dp"/>
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"/>
 
                 <Button
                     android:id="@+id/button_logout"

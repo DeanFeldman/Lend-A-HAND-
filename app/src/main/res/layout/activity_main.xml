@@ -63,8 +63,9 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp"
-            android:background="@color/colorBackground"
+            android:background="@drawable/rounded_background"
             android:elevation="6dp"
+            android:clipToOutline="true"
             android:layout_marginBottom="32dp"
             android:clipToPadding="false">
 

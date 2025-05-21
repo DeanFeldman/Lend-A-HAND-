@@ -34,7 +34,7 @@ public class ItemList {
                 JSONArray jsonArray = new JSONArray(responseBody);
 
                 ITEMS.clear();
-                ITEMS.add("Please select an item below");
+                ITEMS.add("Please select an item below          ▼");
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     String item = jsonArray.getString(i);
