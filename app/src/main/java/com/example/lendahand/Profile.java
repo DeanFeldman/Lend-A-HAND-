@@ -32,7 +32,7 @@ import okhttp3.Response;
 
 public class Profile extends AppCompatActivity {
         private EditText txtName, txtBio;
-        private TextView txtEmail, txtDonatedSummary, txtReceivedSummary, txtDonorContacts;
+        private TextView txtEmail, txtDonatedSummary, txtReceivedSummary, txtDonorContacts, txtOutstandingSummary;
 
 
     @Override
@@ -52,13 +52,15 @@ public class Profile extends AppCompatActivity {
         txtDonatedSummary = findViewById(R.id.text_donated_summary);
         txtReceivedSummary = findViewById(R.id.text_received_summary);
         txtDonorContacts = findViewById(R.id.text_donor_contacts);
+        txtOutstandingSummary = findViewById(R.id.text_outstanding_summary);
+
 
         SharedPreferences prefs = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         String email = prefs.getString("user_email", "");
         int user_Id = prefs.getInt("user_id",-1);
 
         if(user_Id != -1){
-            fetchUserStats(user_Id, txtDonatedSummary, txtReceivedSummary);
+            fetchUserStats(user_Id, txtDonatedSummary, txtReceivedSummary, txtOutstandingSummary);
         }
         txtEmail.setText(email);
 
@@ -217,7 +219,7 @@ public class Profile extends AppCompatActivity {
         });
     }
 
-    private void fetchUserStats(int userId, TextView donatedSummary, TextView receivedSummary) {
+    private void fetchUserStats(int userId, TextView txtDonatedSummary, TextView txtReceivedSummary, TextView txtOutstandingSummary) {
         OkHttpClient client = new OkHttpClient();
 
         RequestBody formBody = new FormBody.Builder()
@@ -233,8 +235,9 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(() -> {
-                    donatedSummary.setText("Failed to load donations.");
-                    receivedSummary.setText("Failed to load received items.");
+                    txtDonatedSummary.setText("Failed to load donations.");
+                    txtReceivedSummary.setText("Failed to load received items.");
+                    txtOutstandingSummary.setText("Failed to load received items.");
                 });
             }
 
@@ -242,8 +245,9 @@ public class Profile extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     runOnUiThread(() -> {
-                        donatedSummary.setText("Error loading donations.");
-                        receivedSummary.setText("Error loading received items.");
+                        txtDonatedSummary.setText("Error loading donations.");
+                        txtReceivedSummary.setText("Error loading received items.");
+                        txtOutstandingSummary.setText("Error loading received items.");
                     });
                     return;
                 }
@@ -285,16 +289,36 @@ public class Profile extends AppCompatActivity {
                             receivedText.append("• ").append(name).append(": ").append(qty).append("\n");
                         }
                     }
+                    JSONArray outstandingArray = json.getJSONArray("outstanding");
+                    StringBuilder outstandingText = new StringBuilder();
+
+                    if (outstandingArray.length() == 0) {
+                        outstandingText.append("You have no unfulfilled requests.");
+                    } else {
+                        outstandingText.append("Your unfulfilled requests:\n");
+                        for (int i = 0; i < outstandingArray.length(); i++) {
+                            JSONObject item = outstandingArray.getJSONObject(i);
+                            String name = item.getString("item_name");
+                            int outstandingQty = item.getInt("outstanding_quantity");
+                            outstandingText.append("• ").append(name)
+                                    .append(": ").append(outstandingQty)
+                                    .append(" still needed\n");
+
+                        }
+                    }
+
 
                     runOnUiThread(() -> {
-                        donatedSummary.setText(donatedText.toString().trim());
-                        receivedSummary.setText(receivedText.toString().trim());
+                        txtDonatedSummary.setText(donatedText.toString().trim());
+                        txtReceivedSummary.setText(receivedText.toString().trim());
+                        txtOutstandingSummary.setText(outstandingText.toString().trim());
                     });
                 }
                 catch (JSONException e){
                     runOnUiThread(() -> {
-                        donatedSummary.setText("Error parsing data.");
-                        receivedSummary.setText("Error parsing data.");
+                        txtDonatedSummary.setText("Error parsing data.");
+                        txtReceivedSummary.setText("Error parsing data.");
+                        txtOutstandingSummary.setText("Error parsing data.");
                     });
                 }
             }

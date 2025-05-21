@@ -176,6 +176,15 @@
                     android:textSize="14sp"
                     android:layout_marginBottom="16dp"/>
 
+                <TextView
+                    android:id="@+id/text_outstanding_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="You have 0 unfufiled requests"
+                    android:textColor="@color/colorOnSurface"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="16dp"/>
+
                 <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
