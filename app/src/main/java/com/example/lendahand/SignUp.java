@@ -190,6 +190,11 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
+        if(txtEmail.getText().toString().contains("@")){
+            CUSTOMTOAST.showCustomToast(this, "Please enter a valid email address");
+            return;
+        }
+
         String formattedDob = String.format(Locale.US, "%04d-%02d-%02d", year, month, day);
 
         //check age is > 18 years old
