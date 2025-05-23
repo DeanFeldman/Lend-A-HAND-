@@ -212,7 +212,7 @@ public class ForgotPassword extends AppCompatActivity {
                                 sender.sendEmail(
                                         email,
                                         "Password Reset Code",
-                                        "Hi " + fname + ",\n\nYour password reset code is: " + code + "\n\nIt expires in 15 minutes.\n\nRegards,\nThe Lend A Hand Team"
+                                        "Hi " + fname + ",\n\nYour password reset code is: " + code + "\n\nIt expires in 15 minutes."
                                 );
                             }).start();
 
@@ -343,7 +343,7 @@ public class ForgotPassword extends AppCompatActivity {
                                 EmailSender sender = new EmailSender();
                                 sender.sendEmail(enteredEmail,
                                         "Password Reset Confirmation",
-                                        "Hi " + fname + ",\n\nYour password was successfully reset.\nIf this wasn't you, please reply to this email.\n\nRegards,\nThe Lend A Hand Team");
+                                        "Hi " + fname + ",\n\nYour password was successfully reset.\nIf this wasn't you, please reply to this email.");
                             }).start();
 
                             Intent intent = new Intent(ForgotPassword.this, MainActivity.class);

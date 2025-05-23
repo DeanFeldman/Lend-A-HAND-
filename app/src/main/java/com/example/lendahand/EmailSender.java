@@ -50,7 +50,7 @@ public class EmailSender {
             message.setFrom(new InternetAddress(username, "LendAHand Support"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(subject);
-            message.setText(body);
+            message.setText(body+"\n\nRegards,\nThe Lend A Hand Team");
 
             Transport.send(message);
             System.out.println("Mail successfully sent");
