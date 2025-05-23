@@ -190,7 +190,7 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
-        if(txtEmail.getText().toString().contains("@")){
+        if(!txtEmail.getText().toString().contains("@")){
             CUSTOMTOAST.showCustomToast(this, "Please enter a valid email address");
             return;
         }
