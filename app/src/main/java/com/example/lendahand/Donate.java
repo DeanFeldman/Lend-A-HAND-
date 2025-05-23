@@ -1,10 +1,20 @@
 package com.example.lendahand;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
@@ -14,6 +24,7 @@ import java.util.List;
 
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import org.json.JSONObject;
@@ -303,17 +314,16 @@ public class Donate extends AppCompatActivity {
                                 String receiverEmail = r.getEmail();
                                 String receiverName = r.getName();
 
-                                runOnUiThread(()->{
-                                    // show a pop up
-                                    runOnUiThread(() -> {
+                                runOnUiThread(() -> {
+                                    showSuccessDialog(() -> {
+                                        // This runs after the success dialog is dismissed
                                         new AlertDialog.Builder(Donate.this)
                                                 .setTitle("Emails Sent")
                                                 .setMessage("Confirmation email sent to:\n" + donorEmail +
-                                                        "\n Notification email sent to:\n" + receiverEmail)
+                                                        "\nNotification email sent to:\n" + receiverEmail)
                                                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                                                 .show();
                                     });
-
                                 });
                                 runOnUiThread(() ->{
 
@@ -362,4 +372,64 @@ public class Donate extends AppCompatActivity {
 
         });
     }
+    private void showSuccessDialog(Runnable onDismiss) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Donate.this, R.style.TransparentDialog);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_donation_success, null);
+        builder.setView(dialogView);
+        builder.setCancelable(false);
+
+        ImageView heart = dialogView.findViewById(R.id.img_heart);
+        ImageView logo = dialogView.findViewById(R.id.img_logo);
+
+        AlertDialog dialog = builder.create();
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        }
+
+        dialog.show();
+
+        // Initial state
+        heart.setVisibility(View.INVISIBLE);
+        heart.setAlpha(1f);
+        heart.setScaleX(0f);
+        heart.setScaleY(0f);
+
+        new Handler().postDelayed(() -> {
+            heart.setVisibility(View.VISIBLE);
+
+            // Animate the scale from 0 to 1 with overshoot for bounce effect
+            ObjectAnimator scaleX = ObjectAnimator.ofFloat(heart, View.SCALE_X, 0f, 1f);
+            ObjectAnimator scaleY = ObjectAnimator.ofFloat(heart, View.SCALE_Y, 0f, 1f);
+            AnimatorSet growSet = new AnimatorSet();
+            growSet.playTogether(scaleX, scaleY);
+            growSet.setDuration(500);
+            growSet.setInterpolator(new OvershootInterpolator());
+
+            growSet.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    // Fade out heart and logo after the scale animation
+                    AnimatorSet exitSet = new AnimatorSet();
+                    exitSet.playTogether(
+                            ObjectAnimator.ofFloat(heart, View.ALPHA, 1f, 0f),
+                            ObjectAnimator.ofFloat(logo, View.ALPHA, 1f, 0f)
+                    );
+                    exitSet.setDuration(500);
+                    exitSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            dialog.dismiss();
+                            if (onDismiss != null) onDismiss.run();
+                        }
+                    });
+                    exitSet.start();
+                }
+            });
+
+            growSet.start();
+        }, 150); // Ensure layout has completed
+    }
+
+
+
 }
