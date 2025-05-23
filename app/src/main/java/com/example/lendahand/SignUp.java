@@ -40,7 +40,7 @@ import okhttp3.Response;
 
 public class SignUp extends AppCompatActivity {
     Button btnSignUp;
-    EditText txtFName , txtLName , txtEmail, txtPassword,dtpDOB;
+    EditText txtFName , txtLName , txtEmail, txtPassword,dtpDOB,txtrepeatpassword;
 
     TextView txtLogin, txtPasswordLength, txtPasswordUpper, txtPasswordLower, txtPasswordSpecial;
 
@@ -66,6 +66,7 @@ public class SignUp extends AppCompatActivity {
         txtLName = findViewById(R.id.input_surname);
         txtEmail = findViewById(R.id.input_email);
         txtPassword = findViewById(R.id.input_password);
+        txtrepeatpassword = findViewById(R.id.input_confirm_password);
         btnSignUp = findViewById(R.id.button_signup);
         dtpDOB = findViewById(R.id.input_dob);
         txtPasswordLength = findViewById(R.id.password_length);
@@ -215,6 +216,10 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
+        //make sure the passwords match
+        if(txtrepeatpassword == txtPassword){
+            CUSTOMTOAST.showCustomToast(SignUp.this, "Passwords do not match.");
+        }
 
         //password >=8 chars
         if (password.length() <= 8) {
