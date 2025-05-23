@@ -39,7 +39,7 @@ public class ForgotPassword extends AppCompatActivity {
     EditText txtEmail, txtVerificationCode, txtPasword;
     Button btnReset;
     LinearLayout stepEmail, stepCode, stepPassword;
-    TextView txtBackToLogin, txtPasswordLength, txtPasswordUpper, txtPasswordLower, txtPasswordSpecial;
+    TextView txtBackToLogin, txtPasswordLength, txtPasswordUpper, txtPasswordLower, txtPasswordSpecial,txtrepeatpassword;
     Step currentStep = Step.EMAIL;
 
     OkHttpClient client = new OkHttpClient();
@@ -61,6 +61,7 @@ public class ForgotPassword extends AppCompatActivity {
         txtEmail = findViewById(R.id.input_email);
         txtVerificationCode = findViewById(R.id.input_verification_code);
         txtPasword = findViewById(R.id.input_new_password);
+        txtrepeatpassword =findViewById(R.id.input_confirm_password);
         btnReset = findViewById(R.id.button_reset_password);
 
         txtPasswordLength = findViewById(R.id.password_length);
@@ -71,8 +72,6 @@ public class ForgotPassword extends AppCompatActivity {
         stepEmail = findViewById(R.id.step_email);
         stepCode = findViewById(R.id.step_code);
         stepPassword = findViewById(R.id.step_password);
-
-        txtPasword = findViewById(R.id.input_new_password);
 
         txtBackToLogin = findViewById(R.id.text_back_to_login);
         txtBackToLogin.setOnClickListener(view -> {
@@ -293,11 +292,24 @@ public class ForgotPassword extends AppCompatActivity {
             return;
         }
 
-        boolean hasUpper = false, hasLower = false, hasSpecial = false;
+        if(!txtPasword.getText().toString().equals(txtrepeatpassword.getText().toString())){
+            CUSTOMTOAST.showCustomToast(this, "Passwords do not match.");
+            return;
+        }
+
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasSpecial = false;
         for (char c : newPassword.toCharArray()) {
-            if (Character.isUpperCase(c)) hasUpper = true;
-            else if (Character.isLowerCase(c)) hasLower = true;
-            else if (!Character.isLetterOrDigit(c)) hasSpecial = true;
+            if (Character.isUpperCase(c)){
+                hasUpper = true;
+            }
+            else if (Character.isLowerCase(c)){
+                hasLower = true;
+            }
+            else if (!Character.isLetterOrDigit(c)) {
+                hasSpecial = true;
+            }
         }
 
         if (!hasUpper || !hasLower || !hasSpecial) {
