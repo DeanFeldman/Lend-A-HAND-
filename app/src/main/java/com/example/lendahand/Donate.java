@@ -217,7 +217,9 @@ public class Donate extends AppCompatActivity {
         }
 
         if (totalAllocated > totalAvailable) {
+            btnDonate.setVisibility(View.GONE);
             CUSTOMTOAST.showCustomToast(this, "You've allocated more than your available amount.");
+
             return;
         }
 
