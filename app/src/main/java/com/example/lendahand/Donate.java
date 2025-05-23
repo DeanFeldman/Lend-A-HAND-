@@ -427,7 +427,7 @@ public class Donate extends AppCompatActivity {
             });
 
             growSet.start();
-        }, 150); // Ensure layout has completed
+        }, 1000); // Ensure layout has completed
     }
 
 
