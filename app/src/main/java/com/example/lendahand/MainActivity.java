@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
         private void processLogin() {
-                String email = emailInput.getText().toString();
+                String email = emailInput.getText().toString().trim();
                 String password = passwordInput.getText().toString();
 
                 if (email.isEmpty() || password.isEmpty()) {

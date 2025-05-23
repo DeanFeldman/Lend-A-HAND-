@@ -378,7 +378,7 @@ public class Profile extends AppCompatActivity {
 
                                 builder.append(": \n   ")
                                         .append(donor.getString("email"))
-                                        .append("\n");
+                                        .append("\n\n");
                             }
 
                         }
