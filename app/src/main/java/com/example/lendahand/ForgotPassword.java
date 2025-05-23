@@ -229,7 +229,6 @@ public class ForgotPassword extends AppCompatActivity {
             }
         });
 
-        //CUSTOMTOAST.showCustomToast(this, "Verification code sent to " + email);
 
         showStep(Step.CODE);
     }
