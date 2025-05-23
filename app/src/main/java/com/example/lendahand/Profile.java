@@ -3,6 +3,10 @@ package com.example.lendahand;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -273,7 +277,7 @@ public class Profile extends AppCompatActivity {
                             JSONObject item = donatedArray.getJSONObject(i);
                             String name = item.getString("item_name");
                             int qty = item.getInt("total_donated");
-                            donatedText.append("• ").append(name).append(": ").append(qty).append("\n");
+                            donatedText.append("•  ").append(name).append(": ").append(qty).append("\n");
                         }
                     }
 
@@ -286,7 +290,7 @@ public class Profile extends AppCompatActivity {
                             JSONObject item = receivedArray.getJSONObject(i);
                             String name = item.getString("item_name");
                             int qty = item.getInt("total_received");
-                            receivedText.append("• ").append(name).append(": ").append(qty).append("\n");
+                            receivedText.append("•  ").append(name).append(": ").append(qty).append("\n");
                         }
                     }
                     JSONArray outstandingArray = json.getJSONArray("outstanding");
@@ -300,7 +304,7 @@ public class Profile extends AppCompatActivity {
                             JSONObject item = outstandingArray.getJSONObject(i);
                             String name = item.getString("item_name");
                             int outstandingQty = item.getInt("outstanding_quantity");
-                            outstandingText.append("• ").append(name)
+                            outstandingText.append("•  ").append(name)
                                     .append(": ").append(outstandingQty)
                                     .append(" still needed\n");
 
@@ -356,19 +360,30 @@ public class Profile extends AppCompatActivity {
 
                     if (obj.getBoolean("success")) {
                         JSONArray donors = obj.getJSONArray("donors");
-                        StringBuilder builder = new StringBuilder();
+                        SpannableStringBuilder builder = new SpannableStringBuilder();
 
                         if (donors.length() == 0) {
                             builder.append("No one has donated to you yet.");
                         } else {
+
                             for (int i = 0; i < donors.length(); i++) {
                                 JSONObject donor = donors.getJSONObject(i);
-                                builder.append("• ").append(donor.getString("name"))
-                                        .append(": ").append(donor.getString("email")).append("\n");
+                                builder.append("•  ");
+
+                                String name = donor.getString("name");
+                                SpannableString underlinedName = new SpannableString(name);
+                                underlinedName.setSpan(new UnderlineSpan(), 0, name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                                builder.append(underlinedName);
+
+                                builder.append(": \n   ")
+                                        .append(donor.getString("email"))
+                                        .append("\n");
                             }
+
                         }
 
-                        runOnUiThread(() -> donorContactsView.setText(builder.toString().trim()));
+                        runOnUiThread(() -> donorContactsView.setText(builder));
                     } else {
                         runOnUiThread(() -> donorContactsView.setText("No donor data available."));
                     }
