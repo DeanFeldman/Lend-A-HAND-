@@ -217,7 +217,7 @@ public class SignUp extends AppCompatActivity {
         }
 
         //make sure the passwords match
-        if(txtrepeatpassword != txtPassword){
+        if(!txtPassword.getText().toString().equals(txtrepeatpassword.getText().toString())){
             CUSTOMTOAST.showCustomToast(SignUp.this, "Passwords do not match.");
             return;
         }
