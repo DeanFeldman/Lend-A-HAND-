@@ -1,28 +1,41 @@
-<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_heart_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    android:layout_gravity="center">
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
 
-    <ImageView
-        android:id="@+id/img_logo"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/fulllogo"
-        android:scaleType="centerCrop"
-        android:layout_gravity="center"/>
+        <ImageView
+            android:id="@+id/img_logo"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:src="@drawable/fulllogo"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"/>
 
+        <ImageView
+            android:id="@+id/img_heart"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:visibility="invisible"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"
+            android:src="@drawable/heart" />
 
-    <ImageView
-        android:id="@+id/img_heart"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:visibility="invisible"
-        android:scaleType="fitCenter"
-        android:layout_gravity="center"
-        android:src="@drawable/heart" />
-
+        <!-- Move overlay here to match center origin -->
+        <FrameLayout
+            android:id="@+id/heart_animation_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clipChildren="false"
+            android:clipToPadding="false" />
+    </FrameLayout>
 
 </FrameLayout>

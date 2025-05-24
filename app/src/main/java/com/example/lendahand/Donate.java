@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,24 +13,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
-
-import org.json.JSONObject;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -40,6 +31,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.FormBody;
@@ -56,9 +55,9 @@ public class Donate extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private RecyclerView recyclerView;
     private ReceiverAdapter receiverAdapter;
-    private List<Receiver> receiverList = new ArrayList<>();
+    private final List<Receiver> receiverList = new ArrayList<>();
     private Button btnDonate;
-
+    private int qty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +100,7 @@ public class Donate extends AppCompatActivity {
             startActivity(intent);
         });
 
-        //fill the arrays
+
         spnItems = findViewById(R.id.spinner_items);
         adapter = new ArrayAdapter<>(
                 this,
@@ -231,7 +230,6 @@ public class Donate extends AppCompatActivity {
             btnDonate.setVisibility(View.GONE);
             CUSTOMTOAST.showCustomToast(this, "You've allocated more than your available amount.");
 
-            return;
         }
 
     }
@@ -243,7 +241,9 @@ public class Donate extends AppCompatActivity {
         int donor_user_id = user_id;
         int request_id = r.getRequestId();
         int quantity = r.quantityToDonate;
-
+        qty=quantity;
+        if(qty%2==0) qty--;
+        if(qty>7) qty=7;
         int newRemaining = r.quantityNeeded - quantity;
 
 
@@ -315,6 +315,9 @@ public class Donate extends AppCompatActivity {
                                 String receiverName = r.getName();
 
                                 runOnUiThread(() -> {
+
+
+
                                     showSuccessDialog(() -> {
                                         // This runs after the success dialog is dismissed
                                         new AlertDialog.Builder(Donate.this)
@@ -396,22 +399,34 @@ public class Donate extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             heart.setVisibility(View.VISIBLE);
 
-            ObjectAnimator scaleX = ObjectAnimator.ofFloat(heart, View.SCALE_X, 0f, 1f);
-            ObjectAnimator scaleY = ObjectAnimator.ofFloat(heart, View.SCALE_Y, 0f, 1f);
-            AnimatorSet growSet = new AnimatorSet();
-            growSet.playTogether(scaleX, scaleY);
-            growSet.setDuration(500);
-            growSet.setInterpolator(new OvershootInterpolator());
+            ValueAnimator pulseAnimator = ValueAnimator.ofFloat(0f, 1f);
+            pulseAnimator.setDuration(500);
+            pulseAnimator.setRepeatCount(2+qty);
+            pulseAnimator.setRepeatMode(ValueAnimator.REVERSE);
+            pulseAnimator.setInterpolator(new OvershootInterpolator());
 
-            growSet.addListener(new AnimatorListenerAdapter() {
+            pulseAnimator.addUpdateListener(animation -> {
+                float value = (float) animation.getAnimatedValue();
+                heart.setScaleX(1f + 0.08f * value);
+                heart.setScaleY(1f + 0.08f * value);
+            });
+
+            pulseAnimator.addListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                    showFlyingHeartsAnimation(logo);
+                }
+
                 @Override
                 public void onAnimationEnd(Animator animation) {
+                    // Fade out heart and logo at the end
                     AnimatorSet exitSet = new AnimatorSet();
                     exitSet.playTogether(
                             ObjectAnimator.ofFloat(heart, View.ALPHA, 1f, 0f),
                             ObjectAnimator.ofFloat(logo, View.ALPHA, 1f, 0f)
                     );
                     exitSet.setDuration(500);
+                    exitSet.setStartDelay(300+qty* 300L);
                     exitSet.addListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -423,9 +438,65 @@ public class Donate extends AppCompatActivity {
                 }
             });
 
-            growSet.start();
+            pulseAnimator.start();
+
         }, 1000);
     }
+
+    private void showFlyingHeartsAnimation(ImageView sourceHeart) {
+        FrameLayout heartContainer = findViewById(R.id.heart_animation_overlay);
+        if (heartContainer == null || sourceHeart == null) return;
+
+        heartContainer.post(() -> {
+
+            int[] sourceLoc = new int[2];
+            int[] containerLoc = new int[2];
+
+            sourceHeart.getLocationOnScreen(sourceLoc);
+            heartContainer.getLocationOnScreen(containerLoc);
+
+            float startX =sourceLoc[0] - containerLoc[0]  + (sourceHeart.getWidth() / 3);
+            float startY = sourceLoc[1] - containerLoc[1] + (sourceHeart.getHeight() / 3);
+
+
+            for (int i = 0; i <qty*3; i++) {
+                final ImageView heart = new ImageView(this);
+                heart.setImageResource(R.drawable.heart);
+                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(300, 300);
+                heart.setLayoutParams(lp);
+                heart.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                heart.setAlpha(1f);
+
+                heartContainer.addView(heart);
+
+                heart.setTranslationX(startX);
+                heart.setTranslationY(startY);
+
+                float randomX = (float) (Math.random() * 600 - 300);
+                float randomY = (float) -(Math.random() * 800 + 200);
+
+                ObjectAnimator translateX = ObjectAnimator.ofFloat(heart, "translationX", startX, startX + randomX);
+                ObjectAnimator translateY = ObjectAnimator.ofFloat(heart, "translationY", startY, startY + randomY);
+                ObjectAnimator fadeOut = ObjectAnimator.ofFloat(heart, "alpha", 1f, 0f);
+                ObjectAnimator scaleX = ObjectAnimator.ofFloat(heart, "scaleX", 1f, 1.5f);
+                ObjectAnimator scaleY = ObjectAnimator.ofFloat(heart, "scaleY", 1f, 1.5f);
+
+                AnimatorSet set = new AnimatorSet();
+                set.playTogether(translateX, translateY, fadeOut, scaleX, scaleY);
+                set.setDuration(1500 + (int) (Math.random() * 500));
+                set.setStartDelay(i * 100L);
+                set.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        heartContainer.removeView(heart);
+                    }
+                });
+                set.start();
+            }
+        });
+    }
+
+
 
 
 

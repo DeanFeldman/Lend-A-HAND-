@@ -1,19 +1,18 @@
 package com.example.lendahand;
 
-import android.widget.Toast;
-
-import org.json.JSONArray;
 import android.app.Activity;
 import android.content.Context;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import java.util.List;
 
 public class ItemList {
 

@@ -2,10 +2,14 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/heart_animation_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    tools:context=".Donate">
+    tools:context=".Donate"
+    android:layout_gravity="center"
+    android:clipChildren="false"
+    android:clipToPadding="false">
 
     <ScrollView
         android:layout_width="match_parent"

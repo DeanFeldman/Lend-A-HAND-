@@ -21,6 +21,8 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
     private final Context context;
     private final OnDonationChangedListener donationChangedListener;
 
+
+
     public interface OnDonationChangedListener {
         void onDonationChanged();
     }
@@ -34,7 +36,7 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView txtName, txtNeeded, txtUserBio;
         EditText txtDonationInput;
-
+        TextWatcher currentWatcher;
         public ViewHolder(View view) {
             super(view);
             txtName = view.findViewById(R.id.text_receiver_name);
@@ -58,19 +60,21 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
         holder.txtUserBio.setText(receiver.biography);
         holder.txtName.setText(receiver.name);
         holder.txtNeeded.setText("Needs: " + receiver.quantityNeeded);
-
-        holder.txtDonationInput.setFilters(new InputFilter[] {
-                new InputFilter.LengthFilter(3)
-        });
-
+        holder.txtDonationInput.setFilters(new InputFilter[]{new InputFilter.LengthFilter(3)});
         holder.txtDonationInput.setText(String.valueOf(receiver.quantityToDonate));
 
-        holder.txtDonationInput.addTextChangedListener(new TextWatcher() {
+        // Remove previous watcher if exists
+        if (holder.currentWatcher != null) {
+            holder.txtDonationInput.removeTextChangedListener(holder.currentWatcher);
+        }
+
+        // Create and assign a new watcher
+        TextWatcher watcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -78,8 +82,9 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
                 int value = 0;
                 try {
                     value = Integer.parseInt(input);
+                } catch (NumberFormatException e) {
+                    // Leave value as 0
                 }
-                catch (NumberFormatException e) { }
 
                 if (value < 0) value = 0;
 
@@ -87,7 +92,6 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
                     CUSTOMTOAST.showCustomToast(context, "Cannot donate more than " + receiver.quantityNeeded + " to " + receiver.name);
                     value = receiver.quantityNeeded;
                 }
-
 
                 receiver.quantityToDonate = value;
 
@@ -98,10 +102,12 @@ public class ReceiverAdapter extends RecyclerView.Adapter<ReceiverAdapter.ViewHo
 
                 donationChangedListener.onDonationChanged();
             }
+        };
 
-        });
-
+        holder.txtDonationInput.addTextChangedListener(watcher);
+        holder.currentWatcher = watcher;
     }
+
 
     @Override
     public int getItemCount() {

@@ -1,5 +1,8 @@
 package com.example.lendahand;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Properties;
+
 import jakarta.mail.Authenticator;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -9,16 +12,13 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Properties;
-
 
 public class EmailSender {
 
 
     private String username = "lendahandconfirmation@gmail.com";
     private String password = "attm tzsu usem htej";
-    private String host = "127.0.0.1";
+    private final String host = "127.0.0.1";
 
 
     public EmailSender() {

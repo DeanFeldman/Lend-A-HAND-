@@ -4,17 +4,11 @@ package com.example.lendahand;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextUtils;
-
 import android.text.TextWatcher;
-
-import java.util.Locale;
-
 import android.view.WindowManager;
 import android.widget.Button;
-
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +23,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
