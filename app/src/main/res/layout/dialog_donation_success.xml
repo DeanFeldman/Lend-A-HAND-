@@ -5,7 +5,7 @@
     android:background="@android:color/transparent"
     android:layout_gravity="center">
 
-    <!-- Full logo -->
+
     <ImageView
         android:id="@+id/img_logo"
         android:layout_width="300dp"
@@ -14,8 +14,7 @@
         android:scaleType="centerCrop"
         android:layout_gravity="center"/>
 
-    <!-- Animated heart (centered over logo's heart) -->
-    <!-- Should have these exact attributes -->
+
     <ImageView
         android:id="@+id/img_heart"
         android:layout_width="300dp"
@@ -23,7 +22,7 @@
         android:visibility="invisible"
         android:scaleType="fitCenter"
         android:layout_gravity="center"
-        android:src="@drawable/heart" /> <!-- Replace with your heart drawable -->
+        android:src="@drawable/heart" />
 
 
 </FrameLayout>

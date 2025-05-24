@@ -388,7 +388,6 @@ public class Donate extends AppCompatActivity {
 
         dialog.show();
 
-        // Initial state
         heart.setVisibility(View.INVISIBLE);
         heart.setAlpha(1f);
         heart.setScaleX(0f);
@@ -397,7 +396,6 @@ public class Donate extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             heart.setVisibility(View.VISIBLE);
 
-            // Animate the scale from 0 to 1 with overshoot for bounce effect
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(heart, View.SCALE_X, 0f, 1f);
             ObjectAnimator scaleY = ObjectAnimator.ofFloat(heart, View.SCALE_Y, 0f, 1f);
             AnimatorSet growSet = new AnimatorSet();
@@ -408,7 +406,6 @@ public class Donate extends AppCompatActivity {
             growSet.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    // Fade out heart and logo after the scale animation
                     AnimatorSet exitSet = new AnimatorSet();
                     exitSet.playTogether(
                             ObjectAnimator.ofFloat(heart, View.ALPHA, 1f, 0f),
@@ -427,7 +424,7 @@ public class Donate extends AppCompatActivity {
             });
 
             growSet.start();
-        }, 1000); // Ensure layout has completed
+        }, 1000);
     }
 
 
