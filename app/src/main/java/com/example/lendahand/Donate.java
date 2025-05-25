@@ -428,7 +428,7 @@ public class Donate extends AppCompatActivity {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    // Fade out heart and logo at the end
+
                     AnimatorSet exitSet = new AnimatorSet();
                     exitSet.playTogether(
                             ObjectAnimator.ofFloat(heart, View.ALPHA, 1f, 0f),
