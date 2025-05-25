@@ -9,7 +9,6 @@ if (!$user_email) {
     exit;
 }
 
-// Check if the user exists
 $stmt = $link->prepare("SELECT user_id, user_fname FROM USERS WHERE user_email = ?");
 $stmt->bind_param("s", $user_email);
 $stmt->execute();

@@ -8,7 +8,7 @@ if (!$user_id) {
 }
 
 $user_id = (int)$user_id;
-$response = ["donated" => [], "received" => []];
+$response = ["donated" => [], "received" => [], "outstanding" => []];
 
 
 $donated_stmt = $link->prepare("
@@ -53,6 +53,29 @@ if ($received_stmt) {
     }
     $received_stmt->close();
 }
+
+$outstanding_stmt = $link->prepare("
+    SELECT i.item_name, SUM(r.quantity_needed) AS outstanding_quantity
+    FROM REQUEST r
+    JOIN ITEM i ON r.item_id = i.item_id
+    WHERE r.user_id = ? AND r.quantity_needed > 0
+    GROUP BY i.item_id
+");
+
+
+if ($outstanding_stmt) {
+    $outstanding_stmt->bind_param("i", $user_id);
+    $outstanding_stmt->execute();
+    $result = $outstanding_stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+        $response["outstanding"][] = [
+            "item_name" => $row["item_name"],
+            "outstanding_quantity" => (int)$row["outstanding_quantity"]
+        ];
+    }
+    $outstanding_stmt->close();
+}
+
 
 echo json_encode($response);
 ?>

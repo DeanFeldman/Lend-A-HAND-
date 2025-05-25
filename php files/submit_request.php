@@ -7,7 +7,6 @@ $quantity_needed = isset($_REQUEST['quantity_needed']) ? intval($_REQUEST['quant
 
 $response = array();
 
-// Validate inputs
 if ($user_id <= 0 || empty($item_name) || $quantity_needed <= 0) {
     $response["success"] = false;
     $response["message"] = "Invalid input parameters.";
@@ -15,7 +14,6 @@ if ($user_id <= 0 || empty($item_name) || $quantity_needed <= 0) {
     exit;
 }
 
-// Step 1: Get item_id from ITEM table
 $stmt = mysqli_prepare($link, "SELECT item_id FROM ITEM WHERE item_name = ?");
 mysqli_stmt_bind_param($stmt, "s", $item_name);
 mysqli_stmt_execute($stmt);
@@ -31,7 +29,6 @@ if (!$found) {
     exit;
 }
 
-// Step 2: Check if request already exists
 $dstmt = mysqli_prepare($link, "SELECT quantity_needed FROM REQUEST WHERE user_id = ? AND item_id = ?");
 mysqli_stmt_bind_param($dstmt, "ii", $user_id, $item_id);
 mysqli_stmt_execute($dstmt);
