@@ -1,6 +1,4 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include 'db_connect.php';
 
 $donor_user_id = $_REQUEST['donor_user_id'] ?? null;
@@ -59,7 +57,7 @@ if ($row = $result->fetch_assoc()) {
     if (!$stmt3->execute()){
         echo json_encode(["error" => "Update failed(DONATION)", "details" => $stmt2->error]);
         exit;
-    } 
+    }
 
 } else {
     $stmt4 = $link->prepare("INSERT INTO DONATION (donor_user_id, request_id, quantity_donated, donation_date) VALUES (?, ?, ?, ?)");

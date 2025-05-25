@@ -19,7 +19,6 @@ if (!$user_fname || !$user_lname || !$user_dob || !$user_email || !$user_passwor
 
 $response = array();
 
-// Check if email already exists
 $stmt = mysqli_prepare($link, "SELECT user_id FROM USERS WHERE user_email = ?");
 mysqli_stmt_bind_param($stmt, "s", $user_email);
 mysqli_stmt_execute($stmt);
@@ -29,7 +28,6 @@ if (mysqli_stmt_num_rows($stmt) > 0) {
     $response["success"] = false;
     $response["message"] = "Email already registered.";
 } else {
-    // Insert user
     $insert_stmt = mysqli_prepare($link, "INSERT INTO USERS (user_fname, user_lname, user_dob, user_email, user_password, user_biography) VALUES (?, ?, ?, ?, ?, ?)");
     mysqli_stmt_bind_param($insert_stmt, "ssssss", $user_fname, $user_lname, $user_dob, $user_email, $user_password, $user_biography);
     

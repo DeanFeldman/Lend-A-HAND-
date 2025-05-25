@@ -1,7 +1,5 @@
 <?php
 include 'db_connect.php';
-
-
 $response = [];
 
 $email = $_POST['user_email'] ?? null;
