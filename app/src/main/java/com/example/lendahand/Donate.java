@@ -12,6 +12,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.AdapterView;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -58,6 +60,9 @@ public class Donate extends AppCompatActivity {
     private final List<Receiver> receiverList = new ArrayList<>();
     private Button btnDonate;
     private int qty;
+    LayoutInflater inflater;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -315,25 +320,29 @@ public class Donate extends AppCompatActivity {
                                 String receiverName = r.getName();
 
                                 runOnUiThread(() -> {
-
-
-
                                     showSuccessDialog(() -> {
-                                        // This runs after the success dialog is dismissed
-                                        new AlertDialog.Builder(Donate.this)
-                                                .setTitle("Emails Sent")
-                                                .setMessage("Confirmation email sent to:\n" + donorEmail +
-                                                        "\nNotification email sent to:\n" + receiverEmail)
-                                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                                .show();
+                                        inflater = LayoutInflater.from(Donate.this);
+                                        View dialogView = inflater.inflate(R.layout.custom_dialogbox, null);
+
+                                        TextView message = dialogView.findViewById(R.id.dialog_message);
+                                        message.setText("Confirmation email sent to:\n" + donorEmail +
+                                                "\n\nNotification email sent to:\n" + receiverEmail);
+
+                                        AlertDialog dialog = new AlertDialog.Builder(Donate.this)
+                                                .setView(dialogView)
+                                                .create();
+
+                                        Button okButton = dialogView.findViewById(R.id.btn_ok);
+                                        okButton.setOnClickListener(v -> dialog.dismiss());
+
+                                        dialog.show();
                                     });
                                 });
-                                runOnUiThread(() ->{
 
+                                runOnUiThread(() ->{
 
                                     //send emails
                                     new Thread(() -> {
-
 
                                         String itemName = spnItems.getSelectedItem().toString();
 
